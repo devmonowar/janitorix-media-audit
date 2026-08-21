@@ -1,0 +1,47 @@
+/*
+ * Janitorix Media Audit — admin styles.
+ *
+ * Deliberately tiny. The UI decision was to use WordPress's own admin design
+ * language rather than ship a bespoke design system — a plugin that looks like
+ * WordPress is one users already know how to operate, and it inherits
+ * accessibility and colour-scheme work for free. What is here is layout, plus
+ * the one thing WordPress has no equivalent for: a status palette.
+ *
+ * Every status also carries text. Colour is never the only signal — this
+ * plugin's entire job is telling people what is dangerous, and a red dot means
+ * nothing to a colourblind reader.
+ */
+.janitorix-hero{background:#fff;border:1px solid #c3c4c7;border-left:4px solid #2271b1;padding:20px 24px;margin:20px 0;max-width:960px}
+.janitorix-hero h2{margin:0 0 4px;font-size:22px}
+.janitorix-hero .janitorix-score{font-size:40px;font-weight:600;line-height:1.1}
+.janitorix-hero .janitorix-label{color:#50575e;margin-left:8px;font-size:15px}
+.janitorix-figures{display:flex;flex-wrap:wrap;gap:28px;margin:16px 0}
+.janitorix-figure .janitorix-n{display:block;font-size:22px;font-weight:600}
+.janitorix-figure .janitorix-t{color:#50575e;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.janitorix-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:960px}
+.janitorix-card{background:#fff;border:1px solid #c3c4c7;padding:14px 16px}
+.janitorix-card h3{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#50575e}
+.janitorix-card .janitorix-big{font-size:26px;font-weight:600}
+.janitorix-actions{display:flex;flex-wrap:wrap;gap:8px}
+.janitorix-reasons{margin:8px 0 0;padding-left:18px;color:#50575e}
+.janitorix-reasons li{margin:2px 0}
+.janitorix-pill{display:inline-block;padding:2px 8px;border-radius:9px;font-size:12px;font-weight:600;border:1px solid}
+.janitorix-safe{background:#edfaef;border-color:#68de7c;color:#00450c}
+.janitorix-caution{background:#fcf9e8;border-color:#dba617;color:#674e00}
+.janitorix-danger{background:#fcf0f1;border-color:#d63638;color:#8a2424}
+.janitorix-neutral{background:#f0f0f1;border-color:#c3c4c7;color:#50575e}
+.janitorix-tabs{margin:16px 0 0;border-bottom:1px solid #c3c4c7}
+.janitorix-tabs a{display:inline-block;padding:8px 14px;text-decoration:none;border:1px solid transparent;border-bottom:none;margin-bottom:-1px}
+.janitorix-tabs a.active{background:#fff;border-color:#c3c4c7;font-weight:600}
+.janitorix-panel{background:#fff;border:1px solid #c3c4c7;border-top:none;padding:16px 20px;max-width:960px}
+.janitorix-evidence{width:100%;border-collapse:collapse}
+.janitorix-evidence th,.janitorix-evidence td{text-align:left;padding:6px 10px;border-bottom:1px solid #f0f0f1}
+.janitorix-empty{background:#fff;border:1px solid #c3c4c7;padding:32px;text-align:center;max-width:640px;margin:20px 0}
+.janitorix-search-log{list-style:none;padding-left:0}
+.janitorix-search-log li{margin:4px 0;color:#1d2327}
+.janitorix-mark{display:inline-block;width:20px;font-weight:700;text-align:center;border:0;background:none}
+.janitorix-bulk-bar{background:#fff;border:1px solid #c3c4c7;padding:4px 16px;margin:12px 0}
+.janitorix-bulk-bar .janitorix-bulk-row{padding:10px 0}
+.janitorix-bulk-bar .janitorix-bulk-row+.janitorix-bulk-row{border-top:1px solid #f0f0f1}
+.janitorix-protected{display:inline-flex;align-items:center;gap:3px;color:#787c82;cursor:help}
+.janitorix-protected .dashicons{font-size:15px;width:15px;height:15px}
