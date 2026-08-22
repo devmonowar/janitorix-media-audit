@@ -4,7 +4,7 @@ Tags: media, cleanup, unused images, media library, storage
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,8 @@ Finds unused images in your media library — and proves they are unused before 
 Most cleanup plugins tell you an image is unused. This one tells you **how sure it is, and why**.
 
 That difference matters, because the cost of being wrong is not symmetric. Leaving an unused image costs you a few kilobytes. Deleting a used one breaks your site — and you may not find out for weeks.
+
+**[Read the full guide](https://devmonowar.github.io/blog/how-to-find-unused-images-in-wordpress/)** — why "unattached" is not the same as "unused", the places a reference hides, and how to check by hand · **[Development on GitHub](https://github.com/devmonowar/janitorix-media-audit)** — report issues or contribute.
 
 = What it actually does =
 
@@ -85,6 +87,10 @@ Every table and option the plugin created is removed. Your media is not touched.
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed: the author link on the Plugins screen went to a WordPress.org profile page instead of the author's own site.
+* Added: a link to the full guide in the plugin description.
+
 = 1.0.0 =
 * First stable release
 * The Dashboard's Confidence card read 0% on every scan — the figure was calculated and displayed but never stored
@@ -123,6 +129,9 @@ Every table and option the plugin created is removed. Your media is not touched.
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Corrects the author link on the Plugins screen. No functional changes.
 
 = 1.0.0 =
 First stable release. Several Risk Engine and ACF detection fixes change what a small number of images are priced or recognised as — rescan after updating to pick them up.
