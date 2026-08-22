@@ -1,0 +1,29 @@
+name: Deploy to WordPress.org
+
+# Pushing a version tag (e.g. 1.0.1) deploys that release to the
+# WordPress.org SVN repository (trunk + tags/<version>) and syncs the
+# banner / icon / screenshots from .wordpress-org/.
+#
+# Before tagging: bump the version in janitorix-media-audit.php and the
+# "Stable tag" in readme.txt so they match the tag.
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: janitorix-media-audit
+          ASSETS_DIR: .wordpress-org

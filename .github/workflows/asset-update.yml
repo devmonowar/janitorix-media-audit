@@ -1,0 +1,66 @@
+name: Update WP.org assets & readme
+
+# Pushing changes to .wordpress-org/ (banner, icon, screenshots) or
+# readme.txt on main syncs ONLY those to WordPress.org SVN — no plugin
+# release, no tag needed. Code changes still deploy via deploy.yml (tags).
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".wordpress-org/**"
+      - "readme.txt"
+  workflow_dispatch:
+
+jobs:
+  assets:
+    name: Sync assets and readme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The sync writes readme.txt into trunk AND into the folder named by
+      # "Stable tag". During a version bump the readme names a tag that is not
+      # on WordPress.org yet, so there is nothing to write it into. Skip the
+      # run instead: pushing the tag deploys the readme and the assets anyway.
+      - name: Check the Stable tag exists on WordPress.org
+        id: stable
+        env:
+          SLUG: janitorix-media-audit
+        run: |
+          set -euo pipefail
+          # `|| true` so a missing line reaches the check below instead of
+          # killing the step on grep's exit code and hiding the reason.
+          stable="$( grep -m1 -i '^Stable tag:' readme.txt | cut -d: -f2- | tr -d '[:space:]' || true )"
+          if [ -z "${stable}" ]; then
+            echo "::error::readme.txt has no 'Stable tag:' line."
+            exit 1
+          fi
+          echo "Stable tag in readme.txt: ${stable}"
+          if [ "${stable}" = "trunk" ]; then
+            echo "sync=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          url="https://plugins.svn.wordpress.org/${SLUG}/tags/${stable}/"
+          code="$( curl -sS -o /dev/null -w '%{http_code}' "${url}" )"
+          if [ "${code}" = "200" ]; then
+            echo "${stable} is on WordPress.org — syncing."
+            echo "sync=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "sync=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Skipped. Stable tag ${stable} is not on WordPress.org yet (${url} returned ${code}). Push the ${stable} tag and the release will carry the readme and the assets."
+          fi
+
+      - name: WordPress.org plugin asset/readme update
+        if: steps.stable.outputs.sync == 'true'
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: janitorix-media-audit
+          ASSETS_DIR: .wordpress-org
+          # A push may mix code changes with readme/asset changes; code ships
+          # via tags (deploy.yml), so sync the assets anyway instead of failing.
+          IGNORE_OTHER_FILES: "true"

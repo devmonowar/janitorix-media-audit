@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint:
+    name: PHP lint (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3' ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Lint PHP files
+        run: find . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
+
+  check:
+    name: Invariants, static analysis, coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # The safety invariants come first: they are what says a dangerous
+      # image is never recommended for deletion. They need no WordPress and
+      # no database, so there is no reason not to run them on every push.
+      - name: Safety invariants
+        run: composer test
+
+      # 2G because treatPhpDocTypesAsCertain:false makes PHPStan re-check
+      # with looser types, and 512M is not enough for this codebase.
+      - name: Static analysis
+        run: composer analyse -- --memory-limit=2G --no-progress
+
+      - name: Coding standards
+        run: composer lint

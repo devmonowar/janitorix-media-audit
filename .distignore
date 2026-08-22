@@ -4,6 +4,7 @@
 /.github
 /.wordpress-org
 /.gitignore
+/.gitattributes
 /.distignore
 /composer.json
 /composer.lock
