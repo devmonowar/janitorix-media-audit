@@ -51,7 +51,7 @@
 	"scripts": {
 		"lint": "phpcs",
 		"lint:fix": "phpcbf",
-		"analyse": "phpstan analyse",
+		"analyse": "phpstan analyse --memory-limit=2G",
 		"test": [
 			"php tests/invariants.php",
 			"php tests/recommendation-grid.php",
@@ -71,6 +71,7 @@
 	},
 	"scripts-descriptions": {
 		"test": "Assert the safety invariants hold. Needs no WordPress and no database.",
-		"check": "Everything: invariants, static analysis, coding standards."
+		"check": "Everything: invariants, static analysis, coding standards.",
+		"analyse": "Static analysis. Needs --memory-limit=2G: PHPStan parses the 150k-line WordPress stub file, and its parallel workers each hold their own copy, so a 512M php.ini kills a worker."
 	}
 }
