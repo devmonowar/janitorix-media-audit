@@ -4,3 +4,17 @@
 *.jpg binary
 *.jpeg binary
 *.gif binary
+
+# Keep the Composer/GitHub source archive to what the plugin actually needs.
+# WordPress.org releases are not affected - that deploy reads .distignore.
+# Runtime folders and README.md stay in, on purpose.
+/.github            export-ignore
+/.wordpress-org     export-ignore
+/.distignore        export-ignore
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/build              export-ignore
+/tests              export-ignore
+/tools              export-ignore
+/phpcs.xml.dist     export-ignore
+/phpstan.neon.dist  export-ignore

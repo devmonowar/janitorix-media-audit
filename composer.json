@@ -2,9 +2,34 @@
 	"name": "devmonowar/janitorix-media-audit",
 	"description": "Finds unused images and removes them safely — by proving they are unused first.",
 	"type": "wordpress-plugin",
+	"keywords": [
+		"wordpress",
+		"wordpress-plugin",
+		"media-library",
+		"unused-images",
+		"media-cleanup",
+		"storage",
+		"housekeeping"
+	],
+	"homepage": "https://wordpress.org/plugins/janitorix-media-audit/",
 	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Monowar Hossain",
+			"email": "devmonowar@gmail.com",
+			"homepage": "https://devmonowar.github.io/",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/devmonowar/janitorix-media-audit/issues",
+		"source": "https://github.com/devmonowar/janitorix-media-audit",
+		"forum": "https://wordpress.org/support/plugin/janitorix-media-audit/",
+		"docs": "https://devmonowar.github.io/blog/how-to-find-unused-images-in-wordpress/"
+	},
 	"require": {
-		"php": ">=7.4"
+		"php": ">=7.4",
+		"composer/installers": "^1.0 || ^2.0"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "^3.7",
@@ -19,7 +44,8 @@
 	},
 	"config": {
 		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"composer/installers": true
 		}
 	},
 	"scripts": {
