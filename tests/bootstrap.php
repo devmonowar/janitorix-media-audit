@@ -80,6 +80,22 @@ if ( ! function_exists( 'get_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'get_post' ) ) {
+	/**
+	 * Tests use a stub WordPress with no real posts, so every id returns null.
+	 * Production uses the real WordPress function.
+	 *
+	 * @param int|WP_Post|null $post     A post ID or a post object.
+	 * @param string           $output   Optional. The required return type.
+	 * @param string           $filter   Optional.
+	 *
+	 * @return WP_Post|null
+	 */
+	function get_post( $post = 0, $output = OBJECT, $filter = 'raw' ) { // phpcs:ignore
+		return null;
+	}
+}
+
 if ( ! function_exists( 'wp_specialchars_decode' ) ) {
 	/**
 	 * `AttachmentResolver::normalize()` runs every candidate string through
