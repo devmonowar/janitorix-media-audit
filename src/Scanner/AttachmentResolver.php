@@ -242,7 +242,13 @@ final class AttachmentResolver {
 			}
 		}
 
-		$resolved = $this->resolve_by_basename( basename( $normalized ) );
+		$basename = basename( $normalized );
+
+		if ( false !== strpos( $normalized, '://' ) && null === $relative ) {
+			$resolved = null;
+		} else {
+			$resolved = $this->resolve_by_basename( $basename );
+		}
 
 		if ( null === $resolved ) {
 			$this->unresolved[] = array(

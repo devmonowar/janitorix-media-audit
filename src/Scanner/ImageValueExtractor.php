@@ -203,6 +203,12 @@ final class ImageValueExtractor {
 			return;
 		}
 
+		$post = get_post( $id );
+
+		if ( $post instanceof \WP_Post && 'attachment' === $post->post_type ) {
+			return;
+		}
+
 		// Both halves of the id+url shape agreeing is the strongest signal
 		// this class ever sees — strong enough that the positive case is
 		// already trusted unconditionally above, with no name or declared-
@@ -328,9 +334,9 @@ final class ImageValueExtractor {
 
 			if ( $this->resolver->is_known_attachment( $id ) ) {
 				$this->add( $found, $id, DetectionMethod::ATTACHMENT_ID, '' !== $path ? $path : $key, (string) $id );
+			} elseif ( $this->is_any_attachment( $id ) ) {
+				return;
 			} else {
-				// The caller told us this field holds an image; the id it
-				// stores is not a coincidence. Gone, not merely unrecognised.
 				$this->resolver->note_missing_attachment( $id, $location, '' !== $path ? $path : $key );
 			}
 
@@ -430,6 +436,20 @@ final class ImageValueExtractor {
 		}
 
 		return $key;
+	}
+
+	/**
+	 * Does this ID point at ANY attachment, even a non-image one?
+	 *
+	 * ACF `file` fields can legitimately point at PDFs, docs, and other
+	 * non-image files. The resolver indexes only image/* mime types, so
+	 * `is_known_attachment()` returns false for them — but they are real
+	 * attachments, not missing ones, and must not be reported as gaps.
+	 */
+	private function is_any_attachment( int $id ): bool {
+		$post = get_post( $id );
+
+		return $post instanceof \WP_Post && 'attachment' === $post->post_type;
 	}
 
 	/**

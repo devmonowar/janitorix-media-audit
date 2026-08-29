@@ -135,7 +135,7 @@ final class WidgetScanner implements Scanner {
 			}
 		}
 
-		if ( preg_match_all( '#https?:\\\\?/\\\\?/[^\s"\'<>()\\\\]+\.(?:jpe?g|png|gif|webp|avif|svg)#i', $raw, $matches ) ) {
+		if ( preg_match_all( '#https?:\\\\?/\\\\?/[^\s"\'<>()]+\.(?:jpe?g|png|gif|webp|avif|svg)#i', $raw, $matches ) ) {
 			foreach ( $matches[0] as $url ) {
 				$resolved = $resolver->resolve( $url, 'widget:' . $label );
 

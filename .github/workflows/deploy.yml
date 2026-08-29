@@ -1,6 +1,6 @@
 name: Deploy to WordPress.org
 
-# Pushing a version tag (e.g. 1.0.1) deploys that release to the
+# Pushing a version tag (e.g. 1.0.2) deploys that release to the
 # WordPress.org SVN repository (trunk + tags/<version>) and syncs the
 # banner / icon / screenshots from .wordpress-org/.
 #

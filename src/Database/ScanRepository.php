@@ -720,24 +720,28 @@ final class ScanRepository {
 	/**
 	 * One stored report by attachment, from the most recent completed scan.
 	 *
-	 * @param int $attachment_id The image to look up.
+	 * @param int     $attachment_id The image to look up.
+	 * @param int|null $scan_id      Restrict to this scan, or null for the newest.
 	 *
 	 * @return object|null
 	 */
-	public function report_for( int $attachment_id ) {
+	public function report_for( int $attachment_id, ?int $scan_id = null ) {
 		global $wpdb;
 
-		return $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT r.* FROM %i r
-				 INNER JOIN %i s ON s.id = r.scan_id
-				 WHERE r.attachment_id = %d AND s.status = 'completed'
-				 ORDER BY r.scan_id DESC LIMIT 1",
-				Tables::reports(),
-				Tables::scans(),
-				$attachment_id
-			)
-		);
+		$sql  = "SELECT r.* FROM %i r
+		         INNER JOIN %i s ON s.id = r.scan_id
+		         WHERE r.attachment_id = %d AND s.status = 'completed'";
+		$args = array( Tables::reports(), Tables::scans(), $attachment_id );
+
+		if ( null !== $scan_id ) {
+			$sql   .= ' AND s.id = %d';
+			$args[] = $scan_id;
+		}
+
+		$sql .= ' ORDER BY r.scan_id DESC LIMIT 1';
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is assembled above from literal fragments only; every value it needs is in $args and goes through prepare() here. The sniff cannot trace a query string across statements.
+		return $wpdb->get_row( $wpdb->prepare( $sql, $args ) );
 	}
 
 	/**

@@ -98,17 +98,19 @@ final class SafetyEngine {
 
 		// 2. There must be a scan, and it must still describe this site. Acting
 		// on a stale verdict is acting on a site that no longer exists.
-		$report = $this->scans->report_for( $attachment_id );
+		$cached = Plugin::instance()->controller()->cached();
 
-		if ( null === $report ) {
+		if ( null === $cached ) {
 			return SafetyVerdict::unsafe(
 				array( __( 'This image has never been scanned. Run a scan before acting on it.', 'janitorix-media-audit' ) )
 			);
 		}
 
-		if ( null === Plugin::instance()->controller()->cached() ) {
+		$report = $this->scans->report_for( $attachment_id, (int) $cached->id );
+
+		if ( null === $report ) {
 			return SafetyVerdict::unsafe(
-				array( __( 'The site has changed since the last scan. Rescan before acting on these results.', 'janitorix-media-audit' ) )
+				array( __( 'This image has no stored report in the current scan. Rescan before acting on it.', 'janitorix-media-audit' ) )
 			);
 		}
 

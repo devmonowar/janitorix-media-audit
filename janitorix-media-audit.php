@@ -3,7 +3,7 @@
  * Plugin Name:       Janitorix Media Audit
  * Plugin URI:        https://github.com/devmonowar/janitorix-media-audit
  * Description:       Finds unused images and removes them safely — by proving they are unused first.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Author:            Monowar Hossain

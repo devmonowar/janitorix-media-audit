@@ -131,7 +131,15 @@ final class ScanFingerprint {
 	 * @param ScannerRegistry $registry The registry, for each scanner's own version.
 	 */
 	public static function full( ScannerRegistry $registry ): string {
-		return self::environment( $registry ) . '-' . self::library() . '-' . self::content();
+		static $cached = null;
+
+		if ( null !== $cached ) {
+			return $cached;
+		}
+
+		$cached = self::environment( $registry ) . '-' . self::library() . '-' . self::content();
+
+		return $cached;
 	}
 
 	/**

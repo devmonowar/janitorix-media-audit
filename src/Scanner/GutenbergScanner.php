@@ -175,7 +175,7 @@ final class GutenbergScanner implements Scanner {
 			}
 		}
 
-		if ( preg_match_all( '#https?:\\\\?/\\\\?/[^\s"\'<>()\\\\]+\.(?:jpe?g|png|gif|webp|avif|svg)#i', $content, $matches ) ) {
+		if ( preg_match_all( '#https?:\\\\?/\\\\?/[^\s"\'<>()]+\.(?:jpe?g|png|gif|webp|avif|svg)#i', $content, $matches ) ) {
 			foreach ( $matches[0] as $url ) {
 				$resolved = $resolver->resolve( $url, sprintf( 'block:%d', $post_id ) );
 

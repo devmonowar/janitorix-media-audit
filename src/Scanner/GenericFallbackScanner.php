@@ -132,7 +132,11 @@ final class GenericFallbackScanner implements Scanner {
 			);
 			// phpcs:enable WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery
 
-			$batch_count = is_array( $rows ) ? count( $rows ) : 0;
+			if ( null === $rows ) {
+				throw new \RuntimeException( 'Database error while reading postmeta for URL sweep, after ' . $examined . ' rows.' ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- WP-CLI/terminal only; the message is logged, never rendered as HTML.
+			}
+
+			$batch_count = count( $rows );
 
 			foreach ( (array) $rows as $row ) {
 				++$examined;
@@ -162,6 +166,10 @@ final class GenericFallbackScanner implements Scanner {
 			)
 		);
 		// phpcs:enable WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery
+
+		if ( null === $options ) {
+			throw new \RuntimeException( 'Database error while reading options for URL sweep.' );
+		}
 
 		foreach ( (array) $options as $row ) {
 			++$examined;
@@ -212,7 +220,11 @@ final class GenericFallbackScanner implements Scanner {
 			);
 			// phpcs:enable WordPress.DB.PreparedSQLPlaceholders, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-			$batch_count = is_array( $rows ) ? count( $rows ) : 0;
+			if ( null === $rows ) {
+				throw new \RuntimeException( 'Database error while reading postmeta for structure sweep, after ' . $examined . ' rows.' ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- WP-CLI/terminal only; the message is logged, never rendered as HTML.
+			}
+
+			$batch_count = count( $rows );
 
 			foreach ( (array) $rows as $row ) {
 				++$examined;

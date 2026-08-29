@@ -4,7 +4,7 @@ Tags: media, cleanup, unused images, media library, storage
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,16 @@ Every table and option the plugin created is removed. Your media is not touched.
 
 == Changelog ==
 
+= 1.0.2 =
+* Fixed: scanner accuracy bugs in Gutenberg, Widget, Generic Fallback, and ACF scanners.
+* Fixed: SafetyEngine now reads verdicts from the current scan only.
+* Fixed: AttachmentResolver no longer resolves external URLs by basename fallback.
+* Fixed: GenericFallbackScanner now reports database errors instead of swallowing them silently.
+* Fixed: outside_uploads no longer flags bare filenames without path separators.
+* Fixed: ScanFingerprint no longer recomputes per row on the Images screen.
+* Fixed: ImageValueExtractor no longer reports non-image attachments as missing.
+* Fixed: Plugin Check security and database query warnings.
+
 = 1.0.1 =
 * Fixed: the author link on the Plugins screen went to a WordPress.org profile page instead of the author's own site.
 * Added: a link to the full guide in the plugin description.
@@ -129,6 +139,9 @@ Every table and option the plugin created is removed. Your media is not touched.
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Scanner accuracy, safety gate, and Plugin Check fixes. Rescan after updating.
 
 = 1.0.1 =
 Corrects the author link on the Plugins screen. No functional changes.
