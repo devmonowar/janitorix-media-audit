@@ -445,6 +445,8 @@ final class ImageValueExtractor {
 	 * non-image files. The resolver indexes only image/* mime types, so
 	 * `is_known_attachment()` returns false for them — but they are real
 	 * attachments, not missing ones, and must not be reported as gaps.
+	 *
+	 * @param int $id The attachment id to test.
 	 */
 	private function is_any_attachment( int $id ): bool {
 		$post = \get_post( $id );

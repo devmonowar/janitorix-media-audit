@@ -108,6 +108,8 @@ final class GenericFallbackScanner implements Scanner {
 	 * uploads directory is a reference no matter which key holds it.
 	 *
 	 * @param AttachmentResolver $resolver The shared, once-built index.
+	 *
+	 * @throws \RuntimeException If the database query fails.
 	 */
 	private function sweep_urls( AttachmentResolver $resolver ): int {
 		global $wpdb;
@@ -193,6 +195,8 @@ final class GenericFallbackScanner implements Scanner {
 	 * values, and never to core-internal keys.
 	 *
 	 * @param AttachmentResolver $resolver The shared, once-built index.
+	 *
+	 * @throws \RuntimeException If the database query fails.
 	 */
 	private function sweep_structures( AttachmentResolver $resolver ): int {
 		global $wpdb;

@@ -168,9 +168,9 @@ final class MediaFacts {
 				continue;
 			}
 
-			// A path that does not sit under YYYY/MM was registered by a theme,
-			// plugin, or importer rather than uploaded — someone shipped it
-			// deliberately, and something expects it to be there.
+		// A path that does not sit under YYYY/MM was registered by a theme,
+		// plugin, or importer rather than uploaded — someone shipped it
+		// deliberately, and something expects it to be there.
 		$file = (string) $row->meta_value;
 
 		if ( '' !== $file ) {
@@ -181,7 +181,7 @@ final class MediaFacts {
 				$report->outside_uploads = true;
 			}
 		}
-		}
+	}
 	}
 
 	/**
