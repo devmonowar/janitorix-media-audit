@@ -203,7 +203,7 @@ final class ImageValueExtractor {
 			return;
 		}
 
-		$post = get_post( $id );
+		$post = \get_post( $id );
 
 		if ( $post instanceof \WP_Post && 'attachment' === $post->post_type ) {
 			return;
@@ -447,7 +447,7 @@ final class ImageValueExtractor {
 	 * attachments, not missing ones, and must not be reported as gaps.
 	 */
 	private function is_any_attachment( int $id ): bool {
-		$post = get_post( $id );
+		$post = \get_post( $id );
 
 		return $post instanceof \WP_Post && 'attachment' === $post->post_type;
 	}
