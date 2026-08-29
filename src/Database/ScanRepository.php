@@ -720,8 +720,8 @@ final class ScanRepository {
 	/**
 	 * One stored report by attachment, from the most recent completed scan.
 	 *
-	 * @param int     $attachment_id The image to look up.
-	 * @param int|null  $scan_id      Restrict to this scan, or null for the newest.
+	 * @param int      $attachment_id The image to look up.
+	 * @param int|null $scan_id       Restrict to this scan, or null for the newest.
 	 *
 	 * @return object|null
 	 */

@@ -168,20 +168,20 @@ final class MediaFacts {
 				continue;
 			}
 
-		// A path that does not sit under YYYY/MM was registered by a theme,
-		// plugin, or importer rather than uploaded — someone shipped it
-		// deliberately, and something expects it to be there.
-		$file = (string) $row->meta_value;
+			// A path that does not sit under YYYY/MM was registered by a theme,
+			// plugin, or importer rather than uploaded — someone shipped it
+			// deliberately, and something expects it to be there.
+			$file = (string) $row->meta_value;
 
-		if ( '' !== $file ) {
-			$has_date_prefix = (bool) preg_match( '#^\d{4}/\d{2}/#', $file );
-			$is_sites_prefix = 0 === strpos( $file, 'sites/' );
+			if ( '' !== $file ) {
+				$has_date_prefix = (bool) preg_match( '#^\d{4}/\d{2}/#', $file );
+				$is_sites_prefix = 0 === strpos( $file, 'sites/' );
 
-			if ( ! $has_date_prefix && ! $is_sites_prefix && false !== strpos( $file, '/' ) ) {
-				$report->outside_uploads = true;
+				if ( ! $has_date_prefix && ! $is_sites_prefix && false !== strpos( $file, '/' ) ) {
+					$report->outside_uploads = true;
+				}
 			}
 		}
-	}
 	}
 
 	/**
