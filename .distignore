@@ -1,16 +1,28 @@
 # Files and folders that should NOT be deployed to WordPress.org.
-/build
+# Baseline shared by all four plugins — change it in all four together.
+#
+# NOTE: this file governs the WordPress.org ZIP (and make-zip.php, which scans the
+# working tree). The Composer/GitHub archive is governed by .gitattributes
+# export-ignore instead. Both must exclude dev files; neither may exclude demos/,
+# demo/ or docs/, which ship and are read at runtime.
 /.git
 /.github
 /.wordpress-org
 /.gitignore
 /.gitattributes
 /.distignore
+/.editorconfig
+/node_modules
+/build
+/vendor
+/tests
 /composer.json
 /composer.lock
 /phpcs.xml.dist
 /phpstan.neon.dist
-/tests
-/tools
-/vendor
+/phpunit.xml.dist
+/.phpunit.result.cache
 /README.md
+# Build and maintenance scripts — kept in git, never shipped.
+/tools
+
