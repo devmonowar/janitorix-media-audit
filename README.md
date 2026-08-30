@@ -2,12 +2,12 @@
 
 > A WordPress plugin that finds unused images and removes them **safely** — by proving they are unused first.
 >
-> **Status:** v1.0.0 — first stable release, shipped.
+> **Status:** v1.0.2 — first stable release, shipped.
 
 | | |
 |---|---|
 | **Plugin name** | Janitorix Media Audit |
-| **Current version** | 1.0.0 |
+| **Current version** | 1.0.2 |
 | **Distribution** | [GitHub Releases](https://github.com/devmonowar/janitorix-media-audit/releases) — WordPress.org listing not published yet |
 | **Namespace** | `JanitorixMediaAudit\` |
 | **Prefix** | `JANITORIX_` |
