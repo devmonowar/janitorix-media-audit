@@ -1,5 +1,6 @@
 {
 	"name": "devmonowar/janitorix-media-audit",
+	"version": "1.0.2",
 	"description": "Finds unused images and removes them safely — by proving they are unused first.",
 	"type": "wordpress-plugin",
 	"keywords": [
