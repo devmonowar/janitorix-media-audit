@@ -101,8 +101,19 @@ final class SafetyEngine {
 		$cached = Plugin::instance()->controller()->cached();
 
 		if ( null === $cached ) {
+			// Two different failures land here and they need different answers.
+			// `cached()` returns null both when nothing has ever been scanned
+			// and when a scan exists but no longer describes this site. Telling
+			// someone who has just run a scan that the image "has never been
+			// scanned" sends them to do the one thing they already did.
+			$ever = $this->scans->report_for( $attachment_id );
+
 			return SafetyVerdict::unsafe(
-				array( __( 'This image has never been scanned. Run a scan before acting on it.', 'janitorix-media-audit' ) )
+				array(
+					null === $ever
+						? __( 'This image has never been scanned. Run a scan before acting on it.', 'janitorix-media-audit' )
+						: __( 'The site has changed since the last scan. Rescan before acting on these results.', 'janitorix-media-audit' ),
+				)
 			);
 		}
 

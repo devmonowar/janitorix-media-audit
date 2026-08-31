@@ -342,6 +342,14 @@ final class CleanupEngine {
 			return;
 		}
 
+		// The gate already asked for the fingerprint earlier in this request,
+		// before the image moved. Re-stamping with that memoised answer would
+		// write the signature of a site that no longer exists — and since
+		// trashing bumps `post_modified_gmt`, every later request would compute
+		// something different, read the scan as stale, and demand a rescan that
+		// nothing had actually invalidated.
+		\JanitorixMediaAudit\Core\ScanFingerprint::flush();
+
 		$controller->repository()->restamp(
 			(int) $scan->id,
 			\JanitorixMediaAudit\Core\ScanFingerprint::full(

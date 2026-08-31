@@ -24,12 +24,26 @@ defined( 'ABSPATH' ) || exit;
  *   - which builder plugins are active (a new one is a new hiding place)
  *   - the active theme (its templates are a search space)
  *   - the media library's own signature (a new upload is a new candidate)
+ *   - the content and the OPTION VALUES the scanners search (a reference can be
+ *     added or taken away without any of the above moving at all)
  *
  * Two scans with the same fingerprint would reach the same conclusion, so the
  * cache can serve one for the other. Two with different fingerprints cannot be
  * compared, and the newer must win.
  */
 final class ScanFingerprint {
+
+	/**
+	 * How many option rows to hash per query.
+	 */
+	private const OPTION_BATCH = 500;
+
+	/**
+	 * Fingerprints already computed this request, keyed by environment signature.
+	 *
+	 * @var array<string,string>
+	 */
+	private static $memo = array();
 
 	/**
 	 * A signature of the environment a scan runs against.
@@ -101,23 +115,83 @@ final class ScanFingerprint {
 			)
 		);
 
-		// Options carry the site furniture — logo, header, theme framework blobs
-		// — and none of it lives in wp_posts. `theme_mods_*` covers the
-		// Customizer; the count catches an option appearing or disappearing.
-		// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery -- 'theme_mods_%%' is a literal option-name prefix, no variable involved; %% is prepare()'s own escaping for one literal percent sign.
-		$mods = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM %i WHERE option_name LIKE 'theme_mods_%%'",
-				$wpdb->options
-			)
-		);
-		// phpcs:enable WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery
-
 		return substr(
-			md5( ( $row->total ?? '0' ) . '|' . ( $row->newest ?? '' ) . '|' . ( $mods ?? '0' ) ),
+			md5( ( $row->total ?? '0' ) . '|' . ( $row->newest ?? '' ) . '|' . self::options() ),
 			0,
 			16
 		);
+	}
+
+	/**
+	 * A signature of the OPTION VALUES the scanners search.
+	 *
+	 * Counting `theme_mods_*` rows — which is all this used to do — sees an
+	 * option appear or disappear and nothing else. Every value change was
+	 * invisible: dropping an image into a sidebar widget, pointing a Customizer
+	 * logo at a different attachment, editing a theme framework blob. So an
+	 * image referenced ONLY from a widget could gain that reference after a
+	 * scan, leave the fingerprint untouched, pass the Safety Engine's live
+	 * gate, and be trashed while genuinely in use. That is the one thing this
+	 * whole class exists to prevent.
+	 *
+	 * The patterns below are the same search space the Widget, Theme Options
+	 * and Generic Fallback scanners read, and that is the point: the
+	 * fingerprint has to cover exactly what a scan looked at, or a stored
+	 * verdict can outlive the thing it was a verdict about. Values are hashed
+	 * one row at a time so a large option store costs no more memory than a
+	 * small one, and transients are excluded because they churn on their own
+	 * and would force a rescan every few minutes.
+	 */
+	public static function options(): string {
+		global $wpdb;
+
+		$digest = hash_init( 'md5' );
+		$offset = 0;
+
+		do {
+			// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery -- every LIKE pattern here is a literal, no variable involved; %% is prepare()'s own escaping for one literal percent sign.
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT option_name, option_value
+					 FROM %i
+					 WHERE ( option_name LIKE 'theme_mods_%%'
+					      OR option_name LIKE 'widget_%%'
+					      OR option_name = 'sidebars_widgets'
+					      OR option_name LIKE '%%_theme_options'
+					      OR option_name LIKE '%%_theme_settings'
+					      OR option_name LIKE 'theme_%%_options'
+					      OR option_name LIKE '%%_options'
+					      OR option_name LIKE '%%_settings'
+					      OR option_value LIKE '%%/uploads/%%' )
+					   AND option_name NOT LIKE '\_transient%%'
+					   AND option_name NOT LIKE '\_site\_transient%%'
+					 ORDER BY option_name
+					 LIMIT %d OFFSET %d",
+					$wpdb->options,
+					self::OPTION_BATCH,
+					$offset
+				)
+			);
+			// phpcs:enable WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery
+
+			// A database error here must not read as "no options changed" — that
+			// is the silent direction, and the silent direction is the one that
+			// trashes a used image. An unusable signature is better than a
+			// confident wrong one: it stops matching, and the gate asks for a
+			// rescan.
+			if ( null === $rows ) {
+				return 'unreadable';
+			}
+
+			foreach ( $rows as $row ) {
+				hash_update( $digest, $row->option_name . '=' . md5( (string) $row->option_value ) . "\n" );
+			}
+
+			$batch_count = count( $rows );
+			$offset     += self::OPTION_BATCH;
+		} while ( self::OPTION_BATCH === $batch_count );
+
+		return substr( hash_final( $digest ), 0, 16 );
 	}
 
 	/**
@@ -128,18 +202,39 @@ final class ScanFingerprint {
 	 * hide, an upload or deletion changes what there is to find, and a content
 	 * edit changes what references them.
 	 *
+	 * Memoised for the request, because the Images screen asks the Safety
+	 * Engine for a verdict on every row and each verdict re-checks the live
+	 * gate — roughly 75 rebuilds, each one several aggregate scans, to answer
+	 * a question whose answer cannot change between two rows of one page.
+	 *
+	 * Keyed by the environment signature rather than held in a single static,
+	 * so a second registry cannot be handed the first one's answer.
+	 *
 	 * @param ScannerRegistry $registry The registry, for each scanner's own version.
 	 */
 	public static function full( ScannerRegistry $registry ): string {
-		static $cached = null;
+		$environment = self::environment( $registry );
 
-		if ( null !== $cached ) {
-			return $cached;
+		if ( ! isset( self::$memo[ $environment ] ) ) {
+			self::$memo[ $environment ] = $environment . '-' . self::library() . '-' . self::content();
 		}
 
-		$cached = self::environment( $registry ) . '-' . self::library() . '-' . self::content();
+		return self::$memo[ $environment ];
+	}
 
-		return $cached;
+	/**
+	 * Forget the memoised fingerprint.
+	 *
+	 * Anything that changes the site inside this request has to call this
+	 * before asking for the fingerprint again, or it gets the signature of the
+	 * site as it was BEFORE the change. Trashing an image moves
+	 * `post_modified_gmt`, which moves the library signature, so a re-stamp
+	 * that skipped this would write a fingerprint that was already wrong —
+	 * and every later request would read the scan as stale and demand a
+	 * rescan that nothing had actually invalidated.
+	 */
+	public static function flush(): void {
+		self::$memo = array();
 	}
 
 	/**
