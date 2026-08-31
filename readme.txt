@@ -4,7 +4,7 @@ Tags: media, cleanup, unused images, media library, storage
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,11 @@ Every table and option the plugin created is removed. Your media is not touched.
 
 == Changelog ==
 
+= 1.0.3 =
+* Fixed: an image used only in a widget, the Customizer or a theme option could be judged unused.
+* Fixed: trashing or restoring an image asked for a rescan that was not needed.
+* Fixed: a scanned image was reported as never scanned once the site had changed.
+
 = 1.0.2 =
 * Fixed: scanner accuracy bugs in Gutenberg, Widget, Generic Fallback, and ACF scanners.
 * Fixed: SafetyEngine now reads verdicts from the current scan only.
@@ -139,6 +144,9 @@ Every table and option the plugin created is removed. Your media is not touched.
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Closes a case where an image still in use could be judged unused. Rescan after updating.
 
 = 1.0.2 =
 Scanner accuracy, safety gate, and Plugin Check fixes. Rescan after updating.
