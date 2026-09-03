@@ -302,7 +302,7 @@ final class NeverDeleteRules {
 		$post = get_post( $attachment_id );
 
 		if ( null === $post ) {
-			return __( 'No such attachment exists.', 'janitorix-media-audit' );
+			return __( 'This image no longer exists — rescan to refresh the list.', 'janitorix-media-audit' );
 		}
 
 		if ( 'attachment' !== $post->post_type ) {

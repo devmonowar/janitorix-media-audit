@@ -228,6 +228,12 @@ final class CleanupEngine {
 
 		$this->logs->info( 'cleanup', sprintf( 'Permanently deleted #%d (%s).', $attachment_id, $filename ), null, $attachment_id );
 
+		// Same reason as trash() and restore(): removing the row moves the
+		// library signature, so a scan that is still perfectly good would read
+		// as stale on the very next request and demand a rescan that nothing
+		// had actually invalidated. Deleting ten images would mean ten scans.
+		$this->resync_scan();
+
 		return array(
 			'ok'      => true,
 			'message' => __( 'Permanently deleted.', 'janitorix-media-audit' ),

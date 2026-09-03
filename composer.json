@@ -67,7 +67,8 @@
 			"php tests/image-key-hints.php",
 			"php tests/dynamic-tags.php",
 			"php tests/scan-history.php",
-			"php tests/declared-image-fields.php"
+			"php tests/declared-image-fields.php",
+			"php tests/csv-escaping.php"
 		],
 		"check": [
 			"@test",

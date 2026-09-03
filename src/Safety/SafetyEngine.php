@@ -131,9 +131,10 @@ final class SafetyEngine {
 			return SafetyVerdict::unsafe(
 				array(
 					sprintf(
-						/* translators: %d: coverage percentage */
-						__( 'Only %d%% of the site was searched — below the 70%% floor.', 'janitorix-media-audit' ),
-						$report->coverage
+						/* translators: 1: coverage percentage searched, 2: the minimum coverage the plugin will act on */
+						__( 'Only %1$d%% of the site was searched — below the %2$d%% floor.', 'janitorix-media-audit' ),
+						(int) $report->coverage,
+						ConfidenceEngine::COVERAGE_FLOOR
 					),
 				)
 			);

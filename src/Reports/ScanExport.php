@@ -10,6 +10,7 @@ declare( strict_types=1 );
 namespace JanitorixMediaAudit\Reports;
 
 use JanitorixMediaAudit\Database\ScanRepository;
+use JanitorixMediaAudit\Support\Csv;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -147,18 +148,22 @@ final class ScanExport {
 		foreach ( $this->scans->reports( $scan_id ) as $row ) {
 			$reasons = json_decode( (string) $row->recommendation_reasons, true );
 
+			// Every string cell goes through the guard, not only the filename.
+			// Which columns can carry attacker-shaped text is not a property
+			// worth tracking per column — one that is missed is the whole
+			// mitigation gone, and the guard is a no-op on ordinary values.
 			fputcsv(
 				$out,
 				array(
 					(int) $row->attachment_id,
-					$row->filename,
-					$row->status,
+					Csv::cell( $row->filename ),
+					Csv::cell( $row->status ),
 					(int) $row->confidence,
 					(int) $row->risk,
-					$row->risk_level,
-					$row->recommendation,
+					Csv::cell( $row->risk_level ),
+					Csv::cell( $row->recommendation ),
 					(int) $row->filesize,
-					is_array( $reasons ) ? implode( ' ', $reasons ) : '',
+					Csv::cell( is_array( $reasons ) ? implode( ' ', $reasons ) : '' ),
 				)
 			);
 		}

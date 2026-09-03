@@ -11,6 +11,7 @@ namespace JanitorixMediaAudit\Calibration;
 
 use JanitorixMediaAudit\Database\ScanRepository;
 use JanitorixMediaAudit\Recommendation\RecommendationEngine;
+use JanitorixMediaAudit\Support\Csv;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -139,8 +140,8 @@ final class BetaReport {
 			$out .= sprintf(
 				"%d,%s,%s,%d,%d,%s,,\n",
 				$c['attachment_id'],
-				'"' . str_replace( '"', '""', $c['filename'] ) . '"',
-				'"' . str_replace( '"', '""', (string) $c['url'] ) . '"',
+				'"' . str_replace( '"', '""', (string) Csv::cell( $c['filename'] ) ) . '"',
+				'"' . str_replace( '"', '""', (string) Csv::cell( (string) $c['url'] ) ) . '"',
 				$c['confidence'],
 				$c['risk'],
 				$c['risk_level']
