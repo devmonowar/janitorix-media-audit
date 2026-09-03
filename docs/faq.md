@@ -14,9 +14,11 @@ deletion, never enough to mark it confidently Used.
 
 ## Will scanning a large media library slow down my site?
 
-A scan runs in the background across cron ticks rather than one long request, and results are
-cached until something on your site actually changes. Day to day, visiting the plugin's screens
-reads the last cached scan rather than rescanning live.
+Not your visitors — nothing is scanned on the front end, ever. A scan is one admin request, so on a
+large media library it can take a while; start it when you can leave the tab open.
+
+Afterwards it costs nothing. Results are cached until something on your site actually changes, so
+day to day the plugin's screens read the last scan rather than rescanning live.
 
 ## Does it work with WooCommerce?
 

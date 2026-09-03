@@ -128,22 +128,6 @@ final class ScanController {
 		return $scan_id;
 	}
 
-	/**
-	 * Run exactly one batch of an already-open scan. This is what a cron tick
-	 * or an AJAX poll calls, so a large library progresses without any single
-	 * request timing out.
-	 *
-	 * @param int $scan_id      The already-open scan to advance.
-	 * @param int $max_scanners How many scanners to run this tick, if unconfigured.
-	 *
-	 * @return array{done:bool,ran:string[],remaining:int}
-	 */
-	public function tick( int $scan_id, int $max_scanners = 4 ): array {
-		$configured = (int) Settings::get( 'batch_size' );
-
-		return $this->processor->run_batch( $scan_id, $configured > 0 ? $configured : $max_scanners );
-	}
-
 	/** The underlying repository, for callers that need to read scan history directly. */
 	public function repository(): ScanRepository {
 		return $this->scans;

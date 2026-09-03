@@ -82,24 +82,9 @@ final class Plugin {
 
 		register_activation_hook( JANITORIX_FILE, array( Tables::class, 'install' ) );
 
-		// Deactivating pauses the plugin; it must not leave a scan tick firing
-		// into a handler that no longer exists. Uninstall does the same, for the
-		// same reason — this just covers the more common case of a plain
-		// deactivate, without waiting for a full removal.
-		register_deactivation_hook(
-			JANITORIX_FILE,
-			static function (): void {
-				wp_clear_scheduled_hook( 'janitorix_scan_tick' );
-			}
-		);
-
 		if ( is_admin() ) {
 			( new \JanitorixMediaAudit\Admin\Menu() )->register();
 		}
-
-		// A background scan advances one batch per cron tick, so a large library
-		// finishes over several ticks without any single request timing out.
-		add_action( 'janitorix_scan_tick', array( $this, 'run_scan_tick' ) );
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			// Registers both `wp janitorix scan` and `wp janitorix explain <id>`.
@@ -115,21 +100,5 @@ final class Plugin {
 	/** A fresh controller, wired to this plugin's registry. */
 	public function controller(): ScanController {
 		return new ScanController( $this->registry );
-	}
-
-	/**
-	 * One cron batch of an in-progress scan; reschedules itself until done.
-	 *
-	 * @param int $scan_id The already-open scan to advance.
-	 */
-	public function run_scan_tick( int $scan_id ): void {
-		$result = $this->controller()->tick( $scan_id );
-
-		// With background processing off, a tick that has already been scheduled
-		// still finishes its batch — stopping mid-scan would leave the row open
-		// forever — but it does not queue another.
-		if ( ! $result['done'] && Settings::is_on( 'background_scan' ) ) {
-			wp_schedule_single_event( time() + 5, 'janitorix_scan_tick', array( $scan_id ) );
-		}
 	}
 }

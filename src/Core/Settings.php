@@ -45,13 +45,9 @@ final class Settings {
 	private const GOVERNING = array(
 		// Basic · Scan Options.
 		'cache_results'     => true,
-		'background_scan'   => true,
 
 		// Basic · Trash Options.
 		'confirm_actions'   => true,
-
-		// Advanced · Performance.
-		'batch_size'        => 0,
 
 		// Advanced · Debug.
 		'debug_mode'        => false,

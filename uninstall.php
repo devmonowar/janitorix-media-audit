@@ -42,5 +42,3 @@ $janitorix_meta_keys = array_merge(
 foreach ( $janitorix_meta_keys as $janitorix_meta_key ) {
 	delete_post_meta_by_key( $janitorix_meta_key );
 }
-
-wp_clear_scheduled_hook( 'janitorix_scan_tick' );

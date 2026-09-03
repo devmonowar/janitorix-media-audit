@@ -105,13 +105,6 @@ final class SettingsPage {
 		);
 
 		$this->toggle(
-			'background_scan',
-			__( 'Scan in the background', 'janitorix-media-audit' ),
-			__( 'Continue a large scan across cron ticks instead of one long request. Off means scans only progress while you watch them.', 'janitorix-media-audit' ),
-			$settings['background_scan']
-		);
-
-		$this->toggle(
 			'confirm_actions',
 			__( 'Confirm before trashing', 'janitorix-media-audit' ),
 			__( 'Ask before moving images to Trash, including in bulk. The Safety Engine still checks every image either way — this only removes the extra click.', 'janitorix-media-audit' ),
@@ -123,13 +116,6 @@ final class SettingsPage {
 		echo '<details><summary>' . esc_html__( 'Show advanced settings', 'janitorix-media-audit' ) . '</summary>';
 		echo '<p class="janitorix-t">' . esc_html__( 'Nothing here is required for a correct, safe result.', 'janitorix-media-audit' ) . '</p>';
 		echo '<table class="form-table" role="presentation"><tbody>';
-
-		$this->number(
-			'batch_size',
-			__( 'Scanners per batch', 'janitorix-media-audit' ),
-			__( '0 means automatic. Lower this only if scans time out on your host.', 'janitorix-media-audit' ),
-			(int) $settings['batch_size']
-		);
 
 		$this->number(
 			'history_retention',
@@ -213,7 +199,12 @@ final class SettingsPage {
 		$this->row( __( 'WordPress', 'janitorix-media-audit' ), get_bloginfo( 'version' ) );
 		$this->row( __( 'PHP', 'janitorix-media-audit' ), PHP_VERSION );
 
-		$tables_ok = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', Tables::scans() ) );
+		// esc_like(), because a table name contains underscores and an
+		// underscore is a single-character wildcard in LIKE. Unescaped,
+		// "wp_janitorix_scans" also matches "wpXjanitorixXscans" — so this
+		// health check could report a healthy database on the strength of a
+		// table belonging to something else entirely.
+		$tables_ok = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( Tables::scans() ) ) );
 
 		$this->row(
 			__( 'Database', 'janitorix-media-audit' ),

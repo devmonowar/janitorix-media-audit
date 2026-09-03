@@ -13,8 +13,8 @@ thing on it: a **Start the first scan** button. Click it.
 
 The scan reads through your posts, pages, Gutenberg blocks, templates, the Customizer, theme
 options, widgets, menus, and — if they're active — Elementor, ACF, and WooCommerce. On a small site
-this takes seconds; on a large media library it can take longer, and continues in the background
-across a few cron ticks rather than tying up one long request.
+this takes seconds; on a large media library it can take a while, so leave the tab open until it
+finishes.
 
 ## What you'll see
 
