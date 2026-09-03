@@ -20,7 +20,7 @@ That difference matters, because the cost of being wrong is not symmetric. Leavi
 
 = What it actually does =
 
-Eleven scanners search the places images hide: post content, Gutenberg blocks and synced patterns, full-site-editing templates, the Customizer, theme options, widgets, menus, Elementor, ACF, WooCommerce, and your theme's PHP, CSS, and JavaScript files.
+Scanners search every place an image can hide: featured images and post attachments, post content, Gutenberg blocks and synced patterns, full-site-editing templates, the Customizer, theme options, widgets, menus, Elementor, ACF, WooCommerce, and your theme's PHP, CSS, and JavaScript files.
 
 Then two independent judgements are made about every image:
 

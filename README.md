@@ -2,13 +2,13 @@
 
 > A WordPress plugin that finds unused images and removes them **safely** — by proving they are unused first.
 >
-> **Status:** v1.0.2 — first stable release, shipped.
+> **Status:** live on WordPress.org.
 
 | | |
 |---|---|
 | **Plugin name** | Janitorix Media Audit |
-| **Current version** | 1.0.2 |
-| **Distribution** | [GitHub Releases](https://github.com/devmonowar/janitorix-media-audit/releases) — WordPress.org listing not published yet |
+| **Current version** | the `Stable tag` in [`readme.txt`](readme.txt) — no version number is repeated here, so none can go stale |
+| **Distribution** | [WordPress.org](https://wordpress.org/plugins/janitorix-media-audit/) · [Packagist](https://packagist.org/packages/devmonowar/janitorix-media-audit) · [GitHub Releases](https://github.com/devmonowar/janitorix-media-audit/releases) |
 | **Namespace** | `JanitorixMediaAudit\` |
 | **Prefix** | `JANITORIX_` |
 | **License** | [GPL-2.0-or-later](LICENSE) — required by WordPress.org, and not optional: WordPress itself is GPL |
@@ -17,9 +17,9 @@
 
 ## What this repository is
 
-A complete, working WordPress plugin — eleven scanners, a Confidence Engine, a Risk Engine, a Recommendation Engine, and five admin screens (Dashboard, Images, Image Details, Scan History, Settings). See `readme.txt` for the full feature description and changelog, or the [help docs](docs/README.md) for how to use it.
+A complete, working WordPress plugin — one scanner per place an image can hide, a Confidence Engine, a Risk Engine, a Recommendation Engine, and five admin screens (Dashboard, Images, Image Details, Scan History, Settings). See `readme.txt` for the full feature description and changelog, or the [help docs](docs/README.md) for how to use it.
 
-The plugin is not yet listed on WordPress.org — install it from a [GitHub release](https://github.com/devmonowar/janitorix-media-audit/releases) in the meantime.
+The plugin is on the [WordPress.org plugin directory](https://wordpress.org/plugins/janitorix-media-audit/), so it installs and updates from inside WordPress like any other plugin.
 
 ---
 
@@ -73,16 +73,17 @@ docs/
 └── hooks.md                        ← developer hooks, for extending scanners
 ```
 
-For installation requirements, the full changelog, and the short-form FAQ, see `readme.txt` — that's also what will show up on the plugin's WordPress.org listing page once published.
+For installation requirements, the full changelog, and the short-form FAQ, see `readme.txt` — that is also what the [WordPress.org listing page](https://wordpress.org/plugins/janitorix-media-audit/) shows.
 
 ---
 
 ## Installation
 
-1. Download the latest release from [GitHub Releases](https://github.com/devmonowar/janitorix-media-audit/releases).
-2. Upload the plugin via **Plugins → Add New → Upload Plugin**, or extract it into `/wp-content/plugins/`.
-3. Activate it through the **Plugins** screen.
-4. Open the new **Janitorix** menu in the WordPress admin sidebar and click **Start the first scan**.
+1. In WordPress, go to **Plugins → Add New**, search for **Janitorix Media Audit**, and click **Install Now** — or download the ZIP from the [WordPress.org listing](https://wordpress.org/plugins/janitorix-media-audit/).
+2. Activate it through the **Plugins** screen.
+3. Open the new **Janitorix** menu in the WordPress admin sidebar and click **Start the first scan**.
+
+Developers can install it with `composer require devmonowar/janitorix-media-audit`, or take a tagged ZIP from [GitHub Releases](https://github.com/devmonowar/janitorix-media-audit/releases).
 
 ## Requirements
 
