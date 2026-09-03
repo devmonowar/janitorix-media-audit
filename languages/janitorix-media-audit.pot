@@ -1,0 +1,1579 @@
+# Copyright (C) 2026 Monowar Hossain
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Janitorix Media Audit\n"
+"Report-Msgid-Bugs-To: https://github.com/devmonowar/janitorix-media-audit/issues\n"
+"POT-Creation-Date: 2026-09-03 17:08+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-09-03 17:08+0000\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Domain: janitorix-media-audit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/Reports/ExplanationBuilder.php:273
+msgid "  ✓ %1$s — %2$s (%3$s, strength %4$d)"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:186
+msgid "%1$d held for review · %2$d at Low risk or below"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:90
+msgid "%1$d image(s) — from scan #%2$d"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:109
+msgid "%1$d of %2$d completed"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:161
+msgid "%1$d of %2$d modules completed"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:265
+msgid "%1$d of %2$d modules completed · %3$d checks"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:296
+msgid "%1$d to Trash · %2$d for Review · %3$d Keep · %4$d Rescan"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:319 src/Admin/Pages/HistoryPage.php:285
+msgid "%1$d used · %2$d possibly used · %3$d unused"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:199
+msgid "%1$d%% confidence (%2$s) — below the %3$d%% needed to recommend removal."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:295
+msgid "%1$d%% confidence (%2$s)."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:715
+msgid "%1$d%% scan coverage · %2$d checks"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:270
+msgid "%1$d%% · %2$d checks"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:84
+msgid "%1$s · %2$d%% confidence · %3$s risk"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:476
+msgid "%1$s — %2$d location"
+msgid_plural "%1$s — %2$d locations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Pages/ImagesPage.php:540
+msgid "%1$s — %2$s ago"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:603
+msgid "%d distinct check was performed."
+msgid_plural "%d distinct checks were performed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Pages/ImagesPage.php:579
+msgid "%d image"
+msgid_plural "%d images"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Reports/DashboardReport.php:305
+msgid "%d image has been deleted while something still points at it. That place is showing a gap right now."
+msgid_plural "%d images have been deleted while something still points at them. Those places are showing gaps right now."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Menu.php:400
+msgid "%d image moved to Trash."
+msgid_plural "%d images moved to Trash."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Risk/RiskEngine.php:257
+msgid "%d published location"
+msgid_plural "%d published locations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Reports/DashboardReport.php:321
+msgid "%d reference looks like an image but matches nothing in this media library."
+msgid_plural "%d references look like images but match nothing in this media library."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:698
+msgid "%d reference on this site points at a file that no longer exists"
+msgid_plural "%d references on this site point at files that no longer exist"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Reports/HealthScore.php:82
+msgid "%d unused image scored High or Critical risk — it needs a human before anything else."
+msgid_plural "%d unused images scored High or Critical risk — these need a human before anything else."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Menu.php:409
+msgid "%d was held back — open it to see why."
+msgid_plural "%d were held back — open them to see why."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Reports/HealthScore.php:99
+msgid "%d%% of the library appears unused."
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:116
+msgid "%d%% of the searchable site was covered."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:207 src/Recommendation/RecommendationEngine.php:228
+msgid "%d%% scan coverage."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:222 src/Admin/Pages/HistoryPage.php:89 src/Admin/Pages/HistoryPage.php:254 src/Admin/Pages/ImageDetailsPage.php:939 src/Admin/Pages/ImagesPage.php:414
+msgid "%s ago"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:237
+msgid "%s checked"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:228
+msgid "%s checked, with problems"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:335
+msgid "%s in the library"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:348
+msgid "%s recoverable"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:164 src/Recommendation/RecommendationEngine.php:177
+msgid "%s risk — a human should look before this is deleted."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:224
+msgid "%s risk."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:123
+msgid "0 means keep forever, which is the default. A scan record is the only answer to \"what did the plugin tell me last month\", so nothing is discarded unless you ask for it."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:111
+msgid "A clean result on a partial scan is not a result."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:455
+msgid "A safety rule is holding this image back — open it to see which one."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:91
+msgid "A weak reference was found — not enough to prove use, enough to stop a deletion."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:819
+msgid "Action"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:443
+msgid "An empty Usage tab is a finding, not a blank page — it is the reason this image is a deletion candidate."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:382
+msgid "Analysis"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:223
+msgid "Any confidence"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:195
+msgid "Any recommendation"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:237
+msgid "Any risk"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:247
+msgid "Any scanner"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:211
+msgid "Any status"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:110
+msgid "Ask before moving images to Trash, including in bulk. The Safety Engine still checks every image either way — this only removes the extra click."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:63
+msgid "At Medium risk or above, the strongest recommendation offered is Review — regardless of confidence."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:421 src/Reports/ScanExport.php:136
+msgid "Attachment ID"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:97
+msgid "Basic"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:40
+msgid "Behaviour you cannot change"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:59
+msgid "Below 70% coverage, no deletion is recommended at any confidence."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:55
+msgid "Below 80% confidence, removal is not recommended — the image is held for review instead."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:290
+msgid "Below the %d%% floor — no deletion is recommended at any confidence"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:102
+msgid "Cache scan results"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:293
+msgid "Clear decision"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:297
+msgid "Clear this decision"
+msgstr ""
+
+#: src/Database/ScanRepository.php:623 src/Reports/DashboardReport.php:154
+msgid "Completed"
+msgstr ""
+
+#: src/Database/ScanRepository.php:619
+msgid "Completed With Warnings"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:172 src/Admin/Pages/ImageDetailsPage.php:579 src/Admin/Pages/ImagesPage.php:393 src/Reports/ScanExport.php:139
+msgid "Confidence"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:628
+msgid "Confidence and risk are independent numbers. One is how sure we are; the other is what it would cost to be wrong."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:54
+msgid "Confidence gate"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:277
+msgid "Confidence in absence"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:125
+msgid "Confidence in absence is capped at 99% — certainty about a negative is not available."
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:108
+msgid "Confidence in use is the strength of the single best piece of evidence — evidence does not accumulate."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:109
+msgid "Confirm before trashing"
+msgstr ""
+
+#: src/Scanner/ContentScanner.php:162
+msgid "Content uses shortcodes no plugin on this site registers, so what they render could not be read: %s."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:325
+msgid "Contributed"
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:97
+msgid "Could not record how to undo this. Nothing was changed."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:105 src/Admin/Pages/DashboardPage.php:258 src/Admin/Pages/HistoryPage.php:65 src/Admin/Pages/HistoryPage.php:265 src/Admin/Pages/ImageDetailsPage.php:625
+msgid "Coverage"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:58
+msgid "Coverage floor"
+msgstr ""
+
+#: src/Reports/DashboardReport.php:259
+msgid "Coverage is %1$d%%, below the %2$d%% floor. No deletion is recommended at any confidence until this is fixed."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:242
+msgid "Critical"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:127
+msgid "Critical risk: deleting this would break the site."
+msgstr ""
+
+#: src/Admin/Menu.php:97 src/Admin/Menu.php:98
+msgid "Dashboard"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:210
+msgid "Database"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:129
+msgid "Debug mode"
+msgstr ""
+
+#: src/Admin/Menu.php:249
+msgid "Decision recorded for %d image."
+msgid_plural "Decision recorded for %d images."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:209
+msgid "Delete permanently"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:232
+msgid "Delete record"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:226
+msgid "Delete this scan record? Your images are not touched — only the record of what this scan concluded."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:380
+msgid "Deleted image"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:236
+msgid "Deleting a record removes what the plugin concluded. It never removes an image."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:50
+msgid "Deletion"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:195
+msgid "Diagnostics"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:423
+msgid "Dimensions"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:66
+msgid "Duration"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:743
+msgid "Effect"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:155
+msgid "Enabled"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:219
+msgid "Enabled."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:868
+msgid "Event"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:856
+msgid "Events"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:67
+msgid "Every table and option this plugin created is removed. Your media is never touched."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:323
+msgid "Examined"
+msgstr ""
+
+#: src/Reports/HealthScore.php:125
+msgid "Excellent"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:292
+msgid "Exclude Forever"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:276
+msgid "Exclude Forever — never recommend anything for it"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:202
+msgid "Excluded"
+msgstr ""
+
+#: src/Admin/Assets.php:82
+msgid "Excluded by you"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:211
+msgid "Export CSV"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:212
+msgid "Export JSON"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:221
+msgid "FAILED — this part of the site was not searched"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:239 src/Database/ScanRepository.php:601 src/Reports/DashboardReport.php:144
+msgid "Failed"
+msgstr ""
+
+#: src/Reports/HealthScore.php:131
+msgid "Fair"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:485
+msgid "Field"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:422 src/Admin/Pages/ImagesPage.php:391
+msgid "File"
+msgstr ""
+
+#: src/Reports/ScanExport.php:137
+msgid "Filename"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:272
+msgid "Filename…"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:275
+msgid "Filter"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:230
+msgid "Filter by confidence level"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:204
+msgid "Filter by recommendation"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:244
+msgid "Filter by risk level"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:216
+msgid "Filter by status"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:253
+msgid "Filter by the scanner that found it"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:765
+msgid "Final score"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:250
+msgid "Finished"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:366
+msgid "Found by"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:268
+msgid "Found in:"
+msgstr ""
+
+#: src/Reports/HealthScore.php:108
+msgid "Full coverage, nothing risky adrift, and little dead weight."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:47
+msgid "Full — every applicable scanner runs."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:973
+msgid "Generated sizes and any WebP variants are destroyed along with the original."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:60
+msgid "Go to the dashboard"
+msgstr ""
+
+#: src/Reports/HealthScore.php:128
+msgid "Good"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:225 src/Admin/Pages/ImagesPage.php:241
+msgid "High"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:148
+msgid "High risk and only %1$d%% confidence (%2$s) — too little certainty about too valuable an image."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:790
+msgid "History"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:487
+msgid "How"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:740
+msgid "How this risk score was reached"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:449
+msgid "If deleted, this breaks: %s."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:963
+msgid "If this image were deleted"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:290
+msgid "Ignore"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:274
+msgid "Ignore — leave it out of reviews"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:200
+msgid "Ignored"
+msgstr ""
+
+#: src/Admin/Assets.php:80
+msgid "Ignored by you"
+msgstr ""
+
+#: src/Admin/Menu.php:134 src/Admin/Menu.php:135 src/Admin/Pages/ImageDetailsPage.php:56
+msgid "Image Details"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:392
+msgid "Image details sections"
+msgstr ""
+
+#: src/Admin/Menu.php:106 src/Admin/Menu.php:107 src/Admin/Pages/DashboardPage.php:102 src/Admin/Pages/HistoryPage.php:62 src/Admin/Pages/ImagesPage.php:51
+msgid "Images"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:262
+msgid "Images examined"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:454
+msgid "It appears in %d published location — it would need fixing."
+msgid_plural "It appears in %d published locations — each one would need fixing."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Recommendation/RecommendationEngine.php:253
+msgid "It is still scanned so it can be found again, and it is never recommended for anything. Remove the exclusion to bring it back."
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:282
+msgid "It is the featured image of %d post right now."
+msgid_plural "It is the featured image of %d posts right now."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Recommendation/RecommendationEngine.php:277
+msgid "It stays in the media library and keeps being scanned — it is simply left out of the lists."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:497
+msgid "It was shipped by a theme or plugin, which means something expects it to be there."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:467
+msgid "Its %1$d×%2$d generated sizes are destroyed with it."
+msgstr ""
+
+#: src/Admin/Menu.php:80
+msgid "Janitorix"
+msgstr ""
+
+#: src/Admin/Menu.php:79 src/Admin/Pages/DashboardPage.php:35
+msgid "Janitorix Media Audit"
+msgstr ""
+
+#: src/Admin/Assets.php:77 src/Admin/Pages/ImagesPage.php:198 src/Reports/ExplanationBuilder.php:294
+msgid "Keep"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:365
+msgid "Kind"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:278
+msgid "Last full scan %s ago."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:794
+msgid "Last modified"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:795 src/Admin/Pages/ImagesPage.php:401
+msgid "Last scanned"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:800
+msgid "Last seen in use"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:865
+msgid "Level"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:385
+msgid "Logs"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:227 src/Admin/Pages/ImagesPage.php:239
+msgid "Low"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:214
+msgid "Make sure your site has a recent backup before deleting permanently — Trash is reversible, this is not."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:291
+msgid "Mark Safe"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:275
+msgid "Mark Safe — never treat it as unused"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:201
+msgid "Marked safe"
+msgstr ""
+
+#: src/Admin/Assets.php:81
+msgid "Marked safe by you"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:86
+msgid "Media health"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:217
+msgid "Media trash"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:226 src/Admin/Pages/ImagesPage.php:240
+msgid "Medium"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:147
+msgid "Move selected to Trash"
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:222
+msgid "Move the image to Trash first, and review it there."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:237
+msgid "Move this image to the Trash? You can restore it afterwards."
+msgstr ""
+
+#: src/Admin/Assets.php:75 src/Admin/Pages/ImageDetailsPage.php:235 src/Admin/Pages/ImagesPage.php:196 src/Reports/ExplanationBuilder.php:292
+msgid "Move to Trash"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:51
+msgid "Move to Trash only, and always reversible. Permanent deletion is offered afterwards, from the Trash, and never as a single step. Every removal is checked by the Safety Engine first — including bulk actions, which are checked one image at a time."
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:130
+msgid "Moved to Trash. It can be restored."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:975
+msgid "Moving an image to Trash is reversible: a restore record is written before anything is touched, so it can be brought back even if WordPress has no media trash configured."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:104
+msgid "Need review"
+msgstr ""
+
+#: src/Reports/DashboardReport.php:155
+msgid "Needs Rescan"
+msgstr ""
+
+#: src/Reports/HealthScore.php:134
+msgid "Needs attention"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:706
+msgid "No broken references"
+msgstr ""
+
+#: src/Reports/HealthScore.php:55
+msgid "No images"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:405
+msgid "No images match these filters."
+msgstr ""
+
+#: src/Admin/Menu.php:385
+msgid "No images were selected."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:169
+msgid "No references found · %1$d%% confidence · %2$s risk."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:501
+msgid "No references found, and nothing about the file suggests it is site furniture."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:223
+msgid "No references found."
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:113
+msgid "No references were detected by any scanner."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:442
+msgid "No references were found anywhere on the site."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:488
+msgid "No references were found — but the filename matches the site-furniture profile."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:496
+msgid "No references were found — but this file lives outside the uploads folder."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:265
+msgid "No scan will treat it as unused while that stands."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:56
+msgid "No scan yet."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:52
+msgid "No scans recorded yet."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:57
+msgid "No stored report for this image. Run a scan first."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:192 src/Safety/SafetyEngine.php:215
+msgid "No such attachment."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:200
+msgid "None yet."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:243
+msgid "Not built yet"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:220
+msgid "Not enabled by your site. This plugin trashes images directly, so removals stay reversible either way, and it writes a restore record before touching anything. Recovery does not depend on this setting."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:681
+msgid "Not used in %s"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:859
+msgid "Nothing has been recorded about this image. It has not been trashed, restored, or refused."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:117
+msgid "Nothing here is required for a correct, safe result."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:71
+msgid "Nothing is deleted. The plugin reports what it would recommend."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:69
+msgid "Nothing scanned yet"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:204
+msgid "Nothing was found, but not enough of the site was searched well enough to say so."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:66
+msgid "On uninstall"
+msgstr ""
+
+#: src/Reports/HealthScore.php:68
+msgid "Only %1$d%% of the site could be searched — below the %2$d%% floor."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:107 src/Safety/SafetyEngine.php:135
+msgid "Only %1$d%% of the site was searched — below the %2$d%% floor."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:145
+msgid "Open Settings"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:431
+msgid "Open in Media Library"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:160
+msgid "Or mark the ticked images as:"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:380
+msgid "Overview"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:200
+msgid "PHP"
+msgstr ""
+
+#: src/Database/ScanRepository.php:613
+msgid "Partially Completed"
+msgstr ""
+
+#: src/Reports/DashboardReport.php:150
+msgid "Paused"
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:221
+msgid "Permanent deletion is only ever offered from the Trash."
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:212
+msgid "Permanent deletion requires explicit confirmation."
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:239
+msgid "Permanently deleted."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:261 src/Admin/Pages/SettingsPage.php:198
+msgid "Plugin version"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:744
+msgid "Points"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:213 src/Reports/ExplanationBuilder.php:76
+msgid "Possibly used"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:390
+msgid "Preview"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:468
+msgid "Protected"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:464
+msgid "Protected: %s"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:134
+msgid "Quick Actions"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:216
+msgid "Recent Activity"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:395 src/Reports/ScanExport.php:142
+msgid "Recommendation"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:258
+msgid "Recommendation: %s"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:197
+msgid "Recommendations"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:293
+msgid "Recommended"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:363
+msgid "References that resolved to nothing"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:810
+msgid "Removals"
+msgstr ""
+
+#: src/Admin/Assets.php:78 src/Admin/Pages/DashboardPage.php:136 src/Admin/Pages/ImagesPage.php:199 src/Reports/ExplanationBuilder.php:295
+msgid "Rescan"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:110
+msgid "Rescan — the site has changed"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:200
+msgid "Restore"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:821
+msgid "Restored"
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:182
+msgid "Restored to the media library."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:199
+msgid "Restoring returns the image to the media library."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:61 src/Admin/Pages/HistoryPage.php:260 src/Admin/Pages/HistoryPage.php:322
+msgid "Result"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:103
+msgid "Reuse a completed scan until the site changes. Turning this off rescans on every request, which is slow and almost never necessary — the cache already invalidates itself when an image, plugin, theme or page changes."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:150
+msgid "Reversible. Each image is checked individually — protected ones are held back and reported."
+msgstr ""
+
+#: src/Admin/Assets.php:76 src/Admin/Pages/ImagesPage.php:197 src/Reports/ExplanationBuilder.php:293
+msgid "Review"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:140
+msgid "Review Images"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:117
+msgid "Review images"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:610 src/Admin/Pages/ImagesPage.php:394 src/Reports/ScanExport.php:140
+msgid "Risk"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:178
+msgid "Risk Summary"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:62
+msgid "Risk ceiling"
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:162
+msgid "Risk is Medium or above. A human must look at this first."
+msgstr ""
+
+#: src/Reports/ScanExport.php:141
+msgid "Risk level"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:111
+msgid "Run a new scan"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:70
+msgid "Run a scan to find out which images your site is not using — and how sure we are about each one."
+msgstr ""
+
+#: src/Database/ScanRepository.php:605 src/Reports/DashboardReport.php:149
+msgid "Running"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:355
+msgid "SVG — almost never a content photo"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:136
+msgid "Save settings"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:59
+msgid "Scan"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:162
+msgid "Scan #%d"
+msgstr ""
+
+#: src/Admin/Menu.php:115 src/Admin/Menu.php:116 src/Admin/Pages/HistoryPage.php:49
+msgid "Scan History"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:39
+msgid "Scan complete."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:46
+msgid "Scan mode"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:122
+msgid "Scan records to keep"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:321
+msgid "Scanner"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:150
+msgid "Scanner Status"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:67
+msgid "Scanners"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:436
+msgid "Select %s for trashing"
+msgstr ""
+
+#: src/Admin/Menu.php:476
+msgid "Select at least one image first."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:388
+msgid "Select every image on this page that may be trashed"
+msgstr ""
+
+#: src/Admin/Menu.php:69 src/Admin/Menu.php:124 src/Admin/Menu.php:125 src/Admin/Pages/SettingsPage.php:33
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:187
+msgid "Settings saved."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:116
+msgid "Show advanced settings"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:130
+msgid "Show the diagnostics below. Useful when reporting a problem."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:742
+msgid "Signal"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:384
+msgid "Simulation"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:489
+msgid "Site furniture hides in theme options and templates, the least searchable part of the site."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:396
+msgid "Size"
+msgstr ""
+
+#: src/Reports/ScanExport.php:143
+msgid "Size (bytes)"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:133
+msgid "Snapshots are immutable — a later scan never rewrites an earlier one."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:570
+msgid "Some images on this page are held back on purpose."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:867
+msgid "Source"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:72
+msgid "Start the first scan"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:425 src/Admin/Pages/ImagesPage.php:392 src/Reports/ScanExport.php:138
+msgid "Status"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:312
+msgid "Storage"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:64
+msgid "Storage Saved"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:488
+msgid "Strength"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:105
+msgid "Strongest evidence scored %d."
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:236
+msgid "System"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:213
+msgid "Tables missing — deactivate and reactivate the plugin."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:212
+msgid "Tables present."
+msgstr ""
+
+#: src/Admin/Menu.php:275
+msgid "That scan is no longer stored."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:175
+msgid "That scan is no longer stored. Only the 50 most recent are kept."
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:225
+msgid "The image could not be deleted."
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:163
+msgid "The image could not be restored."
+msgstr ""
+
+#: src/Cleanup/CleanupEngine.php:121
+msgid "The image was not moved to Trash. Nothing has been reported as done that was not done."
+msgstr ""
+
+#: src/Reports/HealthScore.php:56
+msgid "The media library is empty."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:151
+msgid "The plugin does not recommend trashing this image — its verdict is \"%s\"."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:35
+msgid "The plugin is designed to work correctly without changing anything here. Most people should scan and clean without opening this page at all."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:588
+msgid "The scan found these images and its verdict still stands — a safety rule is refusing the action, so no checkbox is offered. Open an image to see its full reasoning."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:115
+msgid "The site has changed since the last scan. Rescan before acting on these results."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:998
+msgid "The site has changed since the scan it was built from, so what is described below may no longer be true. Run a new scan before acting on it — the plugin will refuse the action until you do."
+msgstr ""
+
+#: src/Reports/DashboardReport.php:250
+msgid "The site has changed since this scan — the results below are out of date. Run a new scan."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:41
+msgid "These are stated rather than offered. Some the safety model rests on; others govern a capability that is not built yet. A switch that does nothing would be worse than either."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:301
+msgid "These outrank the scan. Marking an image safe or excluding it also stops the plugin trashing it, whatever a later scan concludes."
+msgstr ""
+
+#: src/Reports/DashboardReport.php:273
+msgid "These scanners failed: %s. Their part of the site was not searched."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:240
+msgid "This cannot be undone. The file and every generated size are destroyed."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:211
+msgid "This cannot be undone. The file and every generated size are destroyed. Continue?"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:241
+msgid "This image cannot be moved to Trash."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:114
+msgid "This image has never been scanned. Run a scan before acting on it."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:813
+msgid "This image has never been trashed by the plugin."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:124
+msgid "This image has no stored report in the current scan. Rescan before acting on it."
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:110 src/Safety/NeverDeleteRules.php:126 src/Safety/NeverDeleteRules.php:131 src/Safety/NeverDeleteRules.php:154
+msgid "This image is %s."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:217
+msgid "This image is in the Trash. Restoring puts it back; deleting is permanent."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:196
+msgid "This image is not in the trash."
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:305
+msgid "This image no longer exists — rescan to refresh the list."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:185
+msgid "This is a frozen record. Nothing on this page is recalculated from the site as it is now."
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:94 src/Safety/SafetyEngine.php:233
+msgid "This is a never-delete rule and cannot be overridden."
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:309
+msgid "This is not an attachment."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:886
+msgid "This log is read-only. It records what the plugin did, including what it refused to do."
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:313
+msgid "This plugin only handles images."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:997
+msgid "This preview is out of date."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:383
+msgid "Timeline"
+msgstr ""
+
+#: src/Safety/SafetyEngine.php:173
+msgid "Trash is reversible — the image can be restored."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:679
+msgid "USED — found in %s"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:78
+msgid "Unknown"
+msgstr ""
+
+#: src/Admin/Menu.php:348 src/Safety/SafetyEngine.php:79
+msgid "Unknown action."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:381
+msgid "Unresolvable"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:103 src/Admin/Pages/HistoryPage.php:63 src/Admin/Pages/ImagesPage.php:214 src/Reports/ExplanationBuilder.php:77
+msgid "Unused"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:424 src/Admin/Pages/ImageDetailsPage.php:793 src/Admin/Pages/ImagesPage.php:400
+msgid "Uploaded"
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:249
+msgid "Uploaded in the last day — it may not have been placed yet. Protected for another %d hour."
+msgid_plural "Uploaded in the last day — it may not have been placed yet. Protected for another %d hours."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Safety/NeverDeleteRules.php:242
+msgid "Uploaded in the last day — it may not have been placed yet. Protected for less than another hour."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:261
+msgid "Uploaded on or after"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:266
+msgid "Uploaded on or before"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:381
+msgid "Usage"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:212 src/Reports/ExplanationBuilder.php:75
+msgid "Used"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:282
+msgid "Verdicts"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:82
+msgid "Verified in use."
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:224
+msgid "Very High"
+msgstr ""
+
+#: src/Admin/Pages/ImagesPage.php:228 src/Admin/Pages/ImagesPage.php:238
+msgid "Very Low"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:126
+msgid "View report"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:230
+msgid "View scan history"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:490
+msgid "We cannot tell you this is safe to delete. We can only tell you we did not find it."
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:324
+msgid "Weight"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:368
+msgid "What"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:246
+msgid "What this scan concluded"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:486
+msgid "What was there"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:60 src/Admin/Pages/ImageDetailsPage.php:820 src/Admin/Pages/ImageDetailsPage.php:866
+msgid "When"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:367 src/Admin/Pages/ImageDetailsPage.php:484
+msgid "Where"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:319
+msgid "Where this scan looked"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:666
+msgid "Where we looked"
+msgstr ""
+
+#: src/Reports/ScanExport.php:144
+msgid "Why"
+msgstr ""
+
+#: src/Scanner/WooCommerceScanner.php:157
+msgid "WooCommerce Settings"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPage.php:199
+msgid "WordPress"
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:276
+msgid "You asked to skip this image during reviews."
+msgstr ""
+
+#: src/Admin/Menu.php:177
+msgid "You do not have permission to change these settings."
+msgstr ""
+
+#: src/Admin/Menu.php:207
+msgid "You do not have permission to change this."
+msgstr ""
+
+#: src/Admin/Menu.php:291
+msgid "You do not have permission to delete a scan record."
+msgstr ""
+
+#: src/Admin/Menu.php:323 src/Admin/Menu.php:377
+msgid "You do not have permission to do that."
+msgstr ""
+
+#: src/Admin/Menu.php:264
+msgid "You do not have permission to export a scan."
+msgstr ""
+
+#: src/Admin/Menu.php:148
+msgid "You do not have permission to run a scan."
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:85
+msgid "You excluded this image from scans and cleanup."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:252
+msgid "You excluded this image from scans."
+msgstr ""
+
+#: src/Recommendation/RecommendationEngine.php:264 src/Safety/NeverDeleteRules.php:83
+msgid "You marked this image as in use."
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:271
+msgid "Your decision"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:395
+msgid "and %d more — not shown, so this page stays readable."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:278
+msgid "baseline (unreferenced)"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:385
+msgid "byte-identical duplicate exists elsewhere in the library"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:231
+msgid "completed with problems"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:346
+msgid "curated metadata (alt / caption)"
+msgstr ""
+
+#: src/Admin/Menu.php:477
+msgid "image(s) will be moved to Trash. They can be restored afterwards. Continue?"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:92
+msgid "in progress"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:298
+msgid "lives outside the uploads folder"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:257
+msgid "never — this scan did not finish"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:802
+msgid "no scan has ever found it in use"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:223
+msgid "no scanner built for this yet"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:397
+msgid "parent post deleted, and its sibling uploads are also unused"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:337
+msgid "plausible social / OG card"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:325
+msgid "registered in a WordPress core option, and the Customizer scanner failed"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:289
+msgid "site-furniture profile"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:219
+msgid "skipped — not present on this site"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:832
+msgid "still in Trash"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:174
+msgid "that an image with no references really has none — the ceiling is 99%, never 100."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:372
+msgid "the %s scanner failed and would have covered this image"
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:118 src/Safety/NeverDeleteRules.php:142
+msgid "the header image"
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:141
+msgid "the site background"
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:102
+msgid "the site icon"
+msgstr ""
+
+#: src/Safety/NeverDeleteRules.php:103 src/Safety/NeverDeleteRules.php:117
+msgid "the site logo"
+msgstr ""
+
+#: src/Admin/Pages/ImageDetailsPage.php:934 src/Admin/Pages/ImagesPage.php:417
+msgid "unknown"
+msgstr ""
+
+#: src/Reports/ExplanationBuilder.php:80
+msgid "unrated"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:408
+msgid "unreferenced across two scans, 30+ days apart, with no scanner failures"
+msgstr ""
+
+#: src/Admin/Pages/DashboardPage.php:180
+msgid "unused images at High or Critical risk — these need a human."
+msgstr ""
+
+#: src/Risk/RiskEngine.php:311
+msgid "was in use at the last scan, and the place that used it is still there"
+msgstr ""
+
+#: src/Risk/RiskEngine.php:252
+msgid "worst location: %s"
+msgstr ""
+
+#: src/Admin/Pages/HistoryPage.php:171
+msgid "← All scans"
+msgstr ""
+
