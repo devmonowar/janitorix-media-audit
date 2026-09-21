@@ -84,6 +84,7 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			( new \JanitorixMediaAudit\Admin\Menu() )->register();
+			( new \JanitorixMediaAudit\Admin\ReviewNotice() )->register();
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
