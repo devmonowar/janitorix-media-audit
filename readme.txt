@@ -4,7 +4,7 @@ Tags: media, cleanup, unused images, media library, storage
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,12 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 
 == Changelog ==
 
+= 1.0.4 =
+* New: SEO and social image keys (Yoast, Rank Math, SEOPress) are now read as declared image fields, so an og:image stored as a bare attachment ID keeps its image referenced.
+* Fixed: CSV formula injection in exports.
+* Fixed: `SHOW TABLES LIKE` escaping, delete-permanent rescan, and coverage floor handling.
+* Changed: Plugin URI, Author URI, short description and Packagist metadata now point at the author's site.
+
 = 1.0.3 =
 * Fixed: an image used only in a widget, the Customizer or a theme option could be judged unused.
 * Fixed: trashing or restoring an image asked for a rescan that was not needed.
@@ -164,6 +170,9 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+New SEO image detection may change some verdicts. Rescan after updating.
 
 = 1.0.3 =
 Closes a case where an image still in use could be judged unused. Rescan after updating.
