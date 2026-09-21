@@ -8,7 +8,7 @@ Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Finds unused images in your media library — and proves they are unused before recommending anything.
+Finds unused images in your media library — and proves they are unused before recommending anything. Confidence score, risk level, safe delete.
 
 == Description ==
 

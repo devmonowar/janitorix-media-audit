@@ -1,6 +1,6 @@
 {
 	"name": "devmonowar/janitorix-media-audit",
-	"description": "Finds unused images and removes them safely — by proving they are unused first.",
+	"description": "Finds unused images in your media library — and proves they are unused before recommending anything. Confidence score, risk level, safe delete.",
 	"type": "wordpress-plugin",
 	"keywords": [
 		"wordpress",
@@ -14,7 +14,7 @@
 		"storage",
 		"housekeeping"
 	],
-	"homepage": "https://wordpress.org/plugins/janitorix-media-audit/",
+	"homepage": "https://devmonowar.github.io/janitorix-media-audit/",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
