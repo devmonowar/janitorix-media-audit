@@ -62,6 +62,31 @@ final class GenericFallbackScanner implements Scanner {
 		'_product_image_gallery',
 	);
 
+	/**
+	 * Postmeta keys whose plain value IS an attachment ID.
+	 *
+	 * SEO plugins store the social/OG image twice — once as a URL and once as
+	 * a bare ID. The URL row is caught incidentally by sweep_urls(), so the
+	 * image is usually marked referenced anyway. But any setup storing ONLY
+	 * the ID leaves that image looking unused, and deleting it breaks
+	 * og:image. A bare integer matches neither the URL sweep nor the
+	 * structure sweep, so these keys need their own pass. Values are read
+	 * through extract_declared_image(): the key declares the type, so no
+	 * name-guessing and no heuristic scoring.
+	 *
+	 * Site-wide defaults live in options, not postmeta, and their exact keys
+	 * were not verified — so this pass covers postmeta only. URL variants in
+	 * options are already caught by sweep_urls().
+	 */
+	private const SEO_IMAGE_META_KEYS = array(
+		'_yoast_wpseo_opengraph-image-id',
+		'_yoast_wpseo_twitter-image-id',
+		'rank_math_facebook_image_id',
+		'rank_math_twitter_image_id',
+		'_seopress_social_fb_img_attachment_id',
+		'_seopress_social_twitter_img_attachment_id',
+	);
+
 	/** Machine name; must match the weight table. */
 	public function id(): string {
 		return 'generic_fallback';
@@ -69,7 +94,7 @@ final class GenericFallbackScanner implements Scanner {
 
 	/** Bump when this scanner would answer differently. */
 	public function version(): string {
-		return '1.0.0';
+		return '1.0.1';
 	}
 
 	/** Name shown in the UI. */
@@ -90,13 +115,15 @@ final class GenericFallbackScanner implements Scanner {
 	}
 
 	/**
-	 * Two passes: URLs unrestricted, then structured blobs with a bare id.
+	 * Three passes: URLs unrestricted, then structured blobs with a bare id,
+	 * then declared SEO image keys holding a plain integer.
 	 *
 	 * @param AttachmentResolver $resolver The shared, once-built index.
 	 */
 	public function scan( AttachmentResolver $resolver ): ScannerResult {
 		$examined  = $this->sweep_urls( $resolver );
 		$examined += $this->sweep_structures( $resolver );
+		$examined += $this->sweep_declared_keys( $resolver );
 
 		return ScannerResult::success( $this->id(), $this->collected(), $examined );
 	}
@@ -250,13 +277,99 @@ final class GenericFallbackScanner implements Scanner {
 	}
 
 	/**
+	 * Pass three — postmeta keys known to hold a bare attachment ID.
+	 *
+	 * SEO plugins declare these fields as images by definition, so values go
+	 * through extract_declared_image() at full strength — the same mechanism
+	 * ACF image fields use. The key list is filterable for other plugins with
+	 * the same storage shape; additions only, like the image-key hints.
+	 *
+	 * @param AttachmentResolver $resolver The shared, once-built index.
+	 *
+	 * @throws \RuntimeException If the database query fails.
+	 */
+	private function sweep_declared_keys( AttachmentResolver $resolver ): int {
+		global $wpdb;
+
+		/**
+		 * Filters the postmeta keys treated as declared image fields.
+		 *
+		 * Additions only — the built-in keys are always checked.
+		 *
+		 * @param string[] $keys Meta key names.
+		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- already carries the plugin's real prefix, "janitorix_"; the sniff expects the full "janitorix_media_audit_" form.
+		$keys = apply_filters( 'janitorix_seo_image_meta_keys', self::SEO_IMAGE_META_KEYS );
+
+		$clean = array();
+
+		foreach ( (array) $keys as $key ) {
+			if ( ! is_string( $key ) ) {
+				continue;
+			}
+
+			$key = trim( $key );
+
+			if ( '' !== $key ) {
+				$clean[] = $key;
+			}
+		}
+
+		$clean = array_values( array_unique( array_merge( self::SEO_IMAGE_META_KEYS, $clean ) ) );
+
+		$extractor = new ImageValueExtractor( $resolver );
+		$examined  = 0;
+		$offset    = 0;
+
+		$placeholders = implode( ',', array_fill( 0, count( $clean ), '%s' ) );
+
+		do {
+			// phpcs:disable WordPress.DB.PreparedSQLPlaceholders, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the sniff cannot see into the dynamic %s count in the IN() clause (verified count($clean) always matches the placeholders built above).
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT post_id, meta_key, meta_value
+					 FROM %i
+					 WHERE meta_key IN ( {$placeholders} )
+					 ORDER BY meta_id ASC
+					 LIMIT %d OFFSET %d",
+					array_merge( array( $wpdb->postmeta ), $clean, array( self::BATCH_SIZE, $offset ) )
+				)
+			);
+			// phpcs:enable WordPress.DB.PreparedSQLPlaceholders, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+			if ( null === $rows ) {
+				throw new \RuntimeException( 'Database error while reading postmeta for declared keys, after ' . $examined . ' rows.' ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- WP-CLI/terminal only; the message is logged, never rendered as HTML.
+			}
+
+			$batch_count = count( $rows );
+
+			foreach ( (array) $rows as $row ) {
+				++$examined;
+
+				$this->collect_hits_excluding_self(
+					$extractor->extract_declared_image(
+						array( $row->meta_key => $row->meta_value ),
+						sprintf( 'meta:%d', (int) $row->post_id )
+					),
+					(int) $row->post_id,
+					sprintf( 'post #%d', (int) $row->post_id )
+				);
+			}
+
+			$offset += self::BATCH_SIZE;
+		} while ( self::BATCH_SIZE === $batch_count );
+
+		return $examined;
+	}
+
+	/**
 	 * Collect hits found on a post, except a hit pointing back at that same
 	 * post.
 	 *
 	 * A row of an attachment's own postmeta occasionally names its own file —
 	 * WooCommerce's `_wc_attachment_source` records the URL the image was
 	 * imported FROM, on the attachment post itself, which is provenance about
-	 * the file, not a place that uses it. Both sweeps in this scanner search
+	 * the file, not a place that uses it. The sweeps in this scanner search
 	 * postmeta unrestricted by key (see `sweep_urls()`'s docblock), so this is
 	 * the one place that can catch it, regardless of which key it turns up
 	 * under.

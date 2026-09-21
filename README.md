@@ -91,6 +91,12 @@ Developers can install it with `composer require devmonowar/janitorix-media-audi
 - PHP 7.4+
 - Elementor supported directly; other page builders (Divi, Bricks, Oxygen) fall back to a conservative scanner that blocks deletions it can't verify rather than guessing.
 
+## Links
+
+- Plugin page: https://devmonowar.github.io/janitorix-media-audit/
+- Guide: https://devmonowar.github.io/blog/how-to-find-unused-images-in-wordpress/
+- WordPress.org: https://wordpress.org/plugins/janitorix-media-audit/
+
 ## Development
 
 ```bash

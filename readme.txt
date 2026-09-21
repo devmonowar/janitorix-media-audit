@@ -16,7 +16,7 @@ Most cleanup plugins tell you an image is unused. This one tells you **how sure 
 
 That difference matters, because the cost of being wrong is not symmetric. Leaving an unused image costs you a few kilobytes. Deleting a used one breaks your site — and you may not find out for weeks.
 
-**[Read the full guide](https://devmonowar.github.io/blog/how-to-find-unused-images-in-wordpress/)** — why "unattached" is not the same as "unused", the places a reference hides, and how to check by hand · **[Development on GitHub](https://github.com/devmonowar/janitorix-media-audit)** — report issues or contribute.
+**[Read the full guide](https://devmonowar.github.io/blog/how-to-find-unused-images-in-wordpress/)** — why "unattached" is not the same as "unused", the places a reference hides, and how to check by hand · **[Plugin page](https://devmonowar.github.io/janitorix-media-audit/)** · **[Development on GitHub](https://github.com/devmonowar/janitorix-media-audit)** — report issues or contribute.
 
 = What it actually does =
 
@@ -75,6 +75,26 @@ No. Nothing is ever deleted without you clicking, and nothing is deleted in one 
 = What happens when I uninstall it? =
 
 Every table and option the plugin created is removed. Your media is not touched.
+
+= How do I find unused images in WordPress? =
+
+The Media Library's "Unattached" filter is not the answer — see below. Check post content, post meta (ACF fields, page builders, featured images), options (logo, Customizer, widgets), and theme files, by filename and by attachment ID. Or run a scan here: every image gets a confidence score with the evidence behind it.
+
+= Is it safe to delete unused media in WordPress? =
+
+Only after two conditions: the image is proven unused (not merely unattached), and deletion goes through Trash first so a mistake is reversible. This plugin enforces both — it refuses Trash for anything at Medium risk or above, and nothing is ever deleted in one step.
+
+= Why does my media library keep growing? =
+
+Every upload stays unless someone removes it, and WordPress generates several resized copies per upload. Unused originals plus their thumbnails accumulate silently. A periodic scan keeps it flat.
+
+= Does deleting images hurt SEO? =
+
+It can, in ways no database scan sees. An image can be unused on your site and still rank in Google Images or be hotlinked elsewhere — check Search Console, Performance, Images before a bulk delete. Deleted URLs return 404, which loses any signal they had; redirect if they mattered. Sitemaps list images too, and take time to regenerate. When in doubt, Trash and wait before emptying.
+
+= What is the difference between "unattached" and "unused"? =
+
+"Unattached" only means the image was not uploaded inside a post. It says nothing about whether anything references it — a logo, a Customizer image and most page-builder images are all "unattached" and all in use. Unused means no reference anywhere, which takes a real search to establish.
 
 == Screenshots ==
 
