@@ -60,8 +60,34 @@ final class Plugin {
 		$this->registry = new ScannerRegistry();
 	}
 
-	/** Register every scanner and wire up WordPress's own hooks. */
+	/** Wire up WordPress's own hooks (cheap — no scanners built here). */
 	public function boot(): void {
+		register_activation_hook( JANITORIX_FILE, array( Tables::class, 'install' ) );
+
+		if ( is_admin() ) {
+			( new \JanitorixMediaAudit\Admin\Menu() )->register();
+			( new \JanitorixMediaAudit\Admin\ReviewNotice() )->register();
+		}
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			// Registers both `wp janitorix scan` and `wp janitorix explain <id>`.
+			\WP_CLI::add_command( 'janitorix', \JanitorixMediaAudit\API\CLI\ScanCommand::class );
+		}
+	}
+
+	/**
+	 * Build the scanner registry on first use. Scanners are only needed for
+	 * admin-triggered scans and WP-CLI — instantiating all twelve on every
+	 * frontend page view would autoload + construct them for nothing.
+	 *
+	 * @return void
+	 */
+	private function ensure_scanners(): void {
+		static $done = false;
+		if ( $done ) {
+			return;
+		}
+		$done = true;
 		// Scanners are independent of one another — none reads another's output
 		// — which is why they can be built and registered in any order.
 		$this->registry->add( new ContentScanner() );
@@ -79,27 +105,17 @@ final class Plugin {
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- already carries the plugin's real prefix, "janitorix_"; the sniff expects the full "janitorix_media_audit_" form.
 		do_action( 'janitorix_register_scanners', $this->registry );
-
-		register_activation_hook( JANITORIX_FILE, array( Tables::class, 'install' ) );
-
-		if ( is_admin() ) {
-			( new \JanitorixMediaAudit\Admin\Menu() )->register();
-			( new \JanitorixMediaAudit\Admin\ReviewNotice() )->register();
-		}
-
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			// Registers both `wp janitorix scan` and `wp janitorix explain <id>`.
-			\WP_CLI::add_command( 'janitorix', \JanitorixMediaAudit\API\CLI\ScanCommand::class );
-		}
 	}
 
 	/** Every registered scanner. */
 	public function registry(): ScannerRegistry {
+		$this->ensure_scanners();
+
 		return $this->registry;
 	}
 
 	/** A fresh controller, wired to this plugin's registry. */
 	public function controller(): ScanController {
-		return new ScanController( $this->registry );
+		return new ScanController( $this->registry() );
 	}
 }

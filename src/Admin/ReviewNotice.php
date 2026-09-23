@@ -81,6 +81,14 @@ final class ReviewNotice {
 	 * also wait a full period after updating to a version with this notice.
 	 */
 	public function start_clock(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only page check, no state change.
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+		if ( false === strpos( $page, Menu::SLUG ) ) {
+			return;
+		}
 		$state = get_option( self::OPTION );
 		if ( ! is_array( $state ) || empty( $state['since'] ) ) {
 			update_option( self::OPTION, array( 'since' => time() ), false );
@@ -194,7 +202,7 @@ final class ReviewNotice {
 	 */
 	private function on_own_screen(): bool {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen || ! isset( $screen->id ) ) {
+		if ( ! $screen ) {
 			return false;
 		}
 

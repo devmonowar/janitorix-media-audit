@@ -15,7 +15,9 @@ All hooks are prefixed `janitorix_`.
 
 ## `janitorix_register_scanners`
 
-Fires once, during boot, after every built-in scanner has been registered. Use it to add a
+Fires once, the first time the scanner registry is used (not during boot — scanners
+build lazily so frontend views pay nothing), after every built-in scanner has been
+registered. Use it to add a
 scanner of your own — for a custom field type, a page builder the plugin doesn't recognise by
 name, or anything else with its own way of storing an image reference.
 

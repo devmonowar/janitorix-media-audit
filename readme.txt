@@ -2,9 +2,9 @@
 Contributors: kstmonowar
 Tags: media, cleanup, unused images, media library, storage
 Requires at least: 6.2
-Tested up to: 7.1
+Tested up to: 7.1.2
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,11 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 
 == Changelog ==
 
+= 1.0.5 =
+* Added: review notice (15-day) + footer rating link.
+* Fixed: uninstall now removes the review state too.
+* Performance: scanners build lazily (no cost on frontend views); version constant hardcoded.
+
 = 1.0.4 =
 * New: SEO and social image keys (Yoast, Rank Math, SEOPress) are now read as declared image fields, so an og:image stored as a bare attachment ID keeps its image referenced.
 * Fixed: CSV formula injection in exports.
@@ -170,6 +175,9 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+Review notice added; uninstall and performance fixes. No settings change needed.
 
 = 1.0.4 =
 New SEO image detection may change some verdicts. Rescan after updating.

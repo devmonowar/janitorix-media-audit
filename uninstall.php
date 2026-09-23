@@ -27,6 +27,7 @@ JanitorixMediaAudit\Database\Tables::drop();
 
 delete_option( 'janitorix_schema_version' );
 delete_option( 'janitorix_settings' );
+delete_option( 'janitorix_review' );
 
 // Anything the plugin wrote onto attachments rather than into its own tables:
 // the user's decisions, which live there so they outlive a rebuild, and the
