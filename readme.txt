@@ -2,9 +2,9 @@
 Contributors: kstmonowar
 Tags: media, cleanup, unused images, media library, storage
 Requires at least: 6.2
-Tested up to: 7.1.2
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,10 @@ Then two independent judgements are made about every image:
 * **Risk** — how much damage deleting it would cause if we are wrong
 
 These are never blended into one score. A site logo nobody references and a stray upload nobody references look identical to a confidence score, and demand opposite actions.
+
+= Alt text audit =
+
+A separate screen lists every image missing alt text (or carrying a weak one like "IMG_2034"), suggests a replacement built from the filename, title, or parent post, and applies it only when you say so — with undo. Images can be marked decorative, and `wp janitorix alt stats` reports coverage for scripting. Nothing here affects confidence, risk, or any deletion recommendation.
 
 = What it refuses to do =
 
@@ -106,6 +110,11 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 6. Every scan kept as a snapshot a later one never rewrites
 
 == Changelog ==
+
+= 1.1.0 =
+* New: alt text audit — a dedicated screen listing images with missing or weak alt text, with rule-based suggestions (filename, title, parent post), one-click apply with undo, decorative marking, and a Dashboard coverage card.
+* New: `wp janitorix alt stats` — read-only coverage report for the command line, with `--format=json` for scripting.
+* Note: the alt text audit never touches confidence, risk, or deletion recommendations.
 
 = 1.0.5 =
 * Added: review notice (15-day) + footer rating link.

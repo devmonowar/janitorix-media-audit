@@ -70,8 +70,11 @@ final class Plugin {
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			// Registers both `wp janitorix scan` and `wp janitorix explain <id>`.
+			// The scan-and-explain commands.
 			\WP_CLI::add_command( 'janitorix', \JanitorixMediaAudit\API\CLI\ScanCommand::class );
+			// The alt-text stats command. Read-only, like everything above
+			// it that reports — there is no CLI write path.
+			\WP_CLI::add_command( 'janitorix alt', \JanitorixMediaAudit\API\CLI\AltTextCommand::class );
 		}
 	}
 

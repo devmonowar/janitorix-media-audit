@@ -11,6 +11,7 @@ namespace JanitorixMediaAudit\Admin\Pages;
 
 use JanitorixMediaAudit\Admin\Assets;
 use JanitorixMediaAudit\Admin\Menu;
+use JanitorixMediaAudit\AltText\AltStats;
 use JanitorixMediaAudit\Confidence\ConfidenceEngine;
 use JanitorixMediaAudit\Core\Plugin;
 use JanitorixMediaAudit\Reports\DashboardReport;
@@ -39,6 +40,10 @@ final class DashboardPage {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Scan complete.', 'janitorix-media-audit' ) . '</p></div>';
 		}
 
+		// Alt-text coverage needs no scan — attachment meta exists whether or
+		// not one has run — so this card renders on both paths below.
+		$this->alt_card();
+
 		if ( empty( $data['has_scan'] ) ) {
 			$this->empty_state();
 			echo '</div>';
@@ -57,6 +62,37 @@ final class DashboardPage {
 		$this->hero( $data );
 		$this->cards( $data );
 
+		echo '</div>';
+	}
+
+	/**
+	 * Alt-text coverage at a glance, with a way in.
+	 *
+	 * Computed live from attachment meta — deliberately outside
+	 * DashboardReport, which reads only from stored scans and must stay that
+	 * way. An unscanned site still gets this card.
+	 */
+	private function alt_card(): void {
+		$summary = ( new AltStats() )->summary();
+
+		echo '<div class="janitorix-card"><h3>' . esc_html__( 'Alt Text', 'janitorix-media-audit' ) . '</h3>';
+		printf( '<div class="janitorix-big">%d%%</div>', (int) $summary['coverage'] );
+		printf(
+			'<p>%s</p>',
+			esc_html(
+				sprintf(
+					/* translators: 1: images missing alt, 2: images total */
+					__( '%1$d of %2$d images need alt text', 'janitorix-media-audit' ),
+					(int) $summary['missing'],
+					(int) $summary['total']
+				)
+			)
+		);
+		printf(
+			'<p><a href="%s">%s</a></p>',
+			esc_url( admin_url( 'admin.php?page=' . Menu::SLUG . '-alt' ) ),
+			esc_html__( 'Review alt text', 'janitorix-media-audit' )
+		);
 		echo '</div>';
 	}
 

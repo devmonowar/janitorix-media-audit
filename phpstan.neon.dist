@@ -57,6 +57,7 @@ parameters:
             message: '#WP_CLI#'
             paths:
                 - src/API/CLI/ScanCommand.php
+                - src/API/CLI/AltTextCommand.php
                 - src/Core/Plugin.php
 
         # wp_get_attachment_metadata() can return an `original_image` key —

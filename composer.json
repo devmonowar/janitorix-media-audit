@@ -68,7 +68,8 @@
 			"php tests/dynamic-tags.php",
 			"php tests/scan-history.php",
 			"php tests/declared-image-fields.php",
-			"php tests/csv-escaping.php"
+			"php tests/csv-escaping.php",
+			"php tests/alt-text.php"
 		],
 		"check": [
 			"@test",

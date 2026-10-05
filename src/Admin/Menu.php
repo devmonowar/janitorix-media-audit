@@ -9,11 +9,15 @@ declare( strict_types=1 );
 
 namespace JanitorixMediaAudit\Admin;
 
+use JanitorixMediaAudit\Admin\Pages\AltTextPage;
 use JanitorixMediaAudit\Admin\Pages\DashboardPage;
 use JanitorixMediaAudit\Admin\Pages\HistoryPage;
 use JanitorixMediaAudit\Admin\Pages\ImageDetailsPage;
 use JanitorixMediaAudit\Admin\Pages\ImagesPage;
 use JanitorixMediaAudit\Admin\Pages\SettingsPage;
+use JanitorixMediaAudit\AltText\AltDecisions;
+use JanitorixMediaAudit\AltText\AltUndo;
+use JanitorixMediaAudit\AltText\RuleBasedProvider;
 use JanitorixMediaAudit\Core\Plugin;
 use JanitorixMediaAudit\Core\Settings;
 use JanitorixMediaAudit\Core\UserDecisions;
@@ -22,7 +26,7 @@ use JanitorixMediaAudit\Reports\ScanExport;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Five screens, and the three POST handlers that act on them.
+ * Six screens, and the handlers that act on them.
  *
  * The destructive controls in this directory were built AFTER their gatekeeper,
  * never before — building a Trash button ahead of the Safety Engine is how a
@@ -50,6 +54,9 @@ final class Menu {
 		add_action( 'admin_post_janitorix_decide', array( $this, 'handle_decide' ) );
 		add_action( 'admin_post_janitorix_export_scan', array( $this, 'handle_export_scan' ) );
 		add_action( 'admin_post_janitorix_forget_scan', array( $this, 'handle_forget_scan' ) );
+		add_action( 'admin_post_janitorix_alt_row', array( $this, 'handle_alt_row' ) );
+		add_action( 'admin_post_janitorix_alt_bulk', array( $this, 'handle_alt_bulk' ) );
+		add_action( 'admin_post_janitorix_alt_custom', array( $this, 'handle_alt_custom' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( JANITORIX_FILE ), array( $this, 'add_settings_link' ) );
 	}
@@ -117,6 +124,15 @@ final class Menu {
 			self::CAPABILITY,
 			self::SLUG . '-history',
 			array( new HistoryPage(), 'render' )
+		);
+
+		add_submenu_page(
+			self::SLUG,
+			__( 'Alt Text', 'janitorix-media-audit' ),
+			__( 'Alt Text', 'janitorix-media-audit' ),
+			self::CAPABILITY,
+			self::SLUG . '-alt',
+			array( new AltTextPage(), 'render' )
 		);
 
 		add_submenu_page(
@@ -417,6 +433,265 @@ final class Menu {
 		}
 
 		$this->redirect_to_images( $message, $result['trashed'] > 0 );
+	}
+
+	/**
+	 * One alt-text row action: apply a suggestion, mark decorative, or undo.
+	 *
+	 * A GET link carrying a nonce — core's own row-action shape (the same as
+	 * Activate on the Plugins screen) — verified here before anything is
+	 * written. The link carries only the image id, never the words: the
+	 * suggestion is recomputed below, so a crafted URL cannot plant arbitrary
+	 * alt text.
+	 */
+	public function handle_alt_row(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You do not have permission to do that.', 'janitorix-media-audit' ) );
+		}
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- verified on the next line; reading before verifying would be the violation, not reading itself.
+		$do            = isset( $_GET['do'] ) ? sanitize_key( wp_unslash( $_GET['do'] ) ) : '';
+		$attachment_id = isset( $_GET['image'] ) ? absint( wp_unslash( $_GET['image'] ) ) : 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		check_admin_referer( 'janitorix_alt_row' );
+
+		if ( $attachment_id < 1 || null === get_post( $attachment_id ) ) {
+			$this->redirect_to_alt( __( 'That image no longer exists.', 'janitorix-media-audit' ), false );
+		}
+
+		switch ( $do ) {
+			case 'apply':
+				$this->alt_apply( $attachment_id );
+				break;
+			case 'decorative':
+				AltDecisions::set( $attachment_id, true );
+				$this->redirect_to_alt( __( 'Marked as decorative.', 'janitorix-media-audit' ), true );
+				break;
+			case 'undecorate':
+				AltDecisions::set( $attachment_id, false );
+				$this->redirect_to_alt( __( 'No longer marked as decorative.', 'janitorix-media-audit' ), true );
+				break;
+			case 'undo':
+				$this->alt_undo( $attachment_id );
+				break;
+			default:
+				$this->redirect_to_alt( __( 'Unknown action.', 'janitorix-media-audit' ), false );
+		}
+	}
+
+	/**
+	 * Bulk alt-text work on the ticked rows.
+	 *
+	 * The selection can never exceed one page, which is what keeps this from
+	 * becoming a timeout: twenty-five small writes, each decided
+	 * individually, not one giant one.
+	 */
+	public function handle_alt_bulk(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You do not have permission to do that.', 'janitorix-media-audit' ) );
+		}
+
+		check_admin_referer( 'janitorix_alt_bulk' );
+
+		$ids = array_map( 'intval', (array) ( $_POST['images'] ?? array() ) );
+		$ids = array_values( array_filter( array_unique( $ids ) ) );
+
+		if ( empty( $ids ) ) {
+			$this->redirect_to_alt( __( 'No images were selected.', 'janitorix-media-audit' ), false );
+		}
+
+		$action = isset( $_POST['janitorix_alt_bulk_action'] ) ? sanitize_key( wp_unslash( $_POST['janitorix_alt_bulk_action'] ) ) : '';
+
+		$applied = 0;
+		$skipped = 0;
+
+		foreach ( $ids as $attachment_id ) {
+			if ( null === get_post( $attachment_id ) ) {
+				++$skipped;
+				continue;
+			}
+
+			if ( 'decorative' === $action ) {
+				AltDecisions::set( $attachment_id, true );
+				++$applied;
+				continue;
+			}
+
+			if ( 'clear' === $action ) {
+				AltDecisions::set( $attachment_id, false );
+				++$applied;
+				continue;
+			}
+
+			if ( 'apply' === $action && $this->alt_apply_quiet( $attachment_id ) ) {
+				++$applied;
+				continue;
+			}
+
+			++$skipped;
+		}
+
+		// An unrecognised action is refused the same way as an empty
+		// selection: nothing was decided, so nothing is reported as done.
+		if ( ! in_array( $action, array( 'apply', 'decorative', 'clear' ), true ) ) {
+			$this->redirect_to_alt( __( 'Choose a bulk action first.', 'janitorix-media-audit' ), false );
+		}
+
+		$message = sprintf(
+			/* translators: %d: number of images updated */
+			_n( '%d image updated.', '%d images updated.', $applied, 'janitorix-media-audit' ),
+			$applied
+		);
+
+		// A skipped image is an expected outcome — no suggestion worth
+		// applying — not an error. But it must be reported, or the user will
+		// believe the whole selection went.
+		if ( $skipped > 0 ) {
+			$message .= ' ' . sprintf(
+				/* translators: %d: number of images skipped */
+				_n( '%d had no suggestion and was skipped.', '%d had no suggestion and were skipped.', $skipped, 'janitorix-media-audit' ),
+				$skipped
+			);
+		}
+
+		$this->redirect_to_alt( $message, $applied > 0 );
+	}
+
+	/**
+	 * Apply the computed suggestion to one image, with undo kept.
+	 *
+	 * @param int $attachment_id The image to update.
+	 */
+	private function alt_apply( int $attachment_id ): void {
+		if ( ! $this->alt_apply_quiet( $attachment_id ) ) {
+			$this->redirect_to_alt( __( 'No suggestion worth applying for that image.', 'janitorix-media-audit' ), false );
+		}
+
+		$this->redirect_to_alt( __( 'Suggestion applied. Undo is available if it reads wrong.', 'janitorix-media-audit' ), true );
+	}
+
+	/**
+	 * Apply without redirecting — the bulk loop's version.
+	 *
+	 * @param int $attachment_id The image to update.
+	 * @return bool Whether a suggestion was applied.
+	 */
+	private function alt_apply_quiet( int $attachment_id ): bool {
+		$suggestion = $this->suggest_for( $attachment_id );
+
+		if ( null === $suggestion ) {
+			return false;
+		}
+
+		$current = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+
+		AltUndo::save( $attachment_id, is_string( $current ) ? $current : '' );
+		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $suggestion['text'] );
+
+		return true;
+	}
+
+	/**
+	 * Restore the remembered alt text.
+	 *
+	 * @param int $attachment_id The image to restore.
+	 */
+	private function alt_undo( int $attachment_id ): void {
+		$backup = AltUndo::peek( $attachment_id );
+
+		if ( null === $backup ) {
+			$this->redirect_to_alt( __( 'Nothing to undo for that image.', 'janitorix-media-audit' ), false );
+		}
+
+		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $backup['text'] );
+		AltUndo::clear( $attachment_id );
+
+		$this->redirect_to_alt( __( 'Undone — the previous alt text is back.', 'janitorix-media-audit' ), true );
+	}
+
+	/**
+	 * Suggest for one image: filename, title, parent title.
+	 *
+	 * The same triple the list builds at render (see AltTextPage) — rebuilt
+	 * here so the handler never trusts words that arrived in the request.
+	 *
+	 * @param int $attachment_id The image to suggest for.
+	 * @return array{text:string,source:string}|null
+	 */
+	private function suggest_for( int $attachment_id ): ?array {
+		$post = get_post( $attachment_id );
+
+		if ( null === $post ) {
+			return null;
+		}
+
+		$file         = get_attached_file( $attachment_id );
+		$parent_title = 0 !== (int) $post->post_parent ? get_the_title( (int) $post->post_parent ) : '';
+
+		return ( new RuleBasedProvider() )->suggest(
+			array(
+				'filename'     => is_string( $file ) ? wp_basename( $file ) : '',
+				'title'        => (string) $post->post_title,
+				'parent_title' => is_string( $parent_title ) ? $parent_title : '',
+			)
+		);
+	}
+
+	/**
+	 * Save hand-written alt text from a row's suggestion box.
+	 *
+	 * The box arrives prefilled with the suggestion, but what is saved is
+	 * whatever the person left in it — their own words included. Same write
+	 * guarantees as an apply: the previous value is kept for undo, length is
+	 * capped like a suggestion, and a weak custom text is still saved (the
+	 * list will flag it Weak) rather than refused — refusing a person's own
+	 * words would be paternalism, not safety.
+	 */
+	public function handle_alt_custom(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You do not have permission to do that.', 'janitorix-media-audit' ) );
+		}
+
+		check_admin_referer( 'janitorix_alt_custom' );
+
+		$attachment_id = isset( $_POST['image'] ) ? absint( wp_unslash( $_POST['image'] ) ) : 0;
+		$text          = isset( $_POST['janitorix_alt_text'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['janitorix_alt_text'] ) ) ) : '';
+
+		if ( $attachment_id < 1 || null === get_post( $attachment_id ) ) {
+			$this->redirect_to_alt( __( 'That image no longer exists.', 'janitorix-media-audit' ), false );
+		}
+
+		if ( '' === $text ) {
+			$this->redirect_to_alt( __( 'Write some alt text first — or mark the image decorative instead.', 'janitorix-media-audit' ), false );
+		}
+
+		$current = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+
+		AltUndo::save( $attachment_id, is_string( $current ) ? $current : '' );
+		update_post_meta( $attachment_id, '_wp_attachment_image_alt', RuleBasedProvider::cap_text( $text ) );
+
+		$this->redirect_to_alt( __( 'Alt text saved. Undo is available if it reads wrong.', 'janitorix-media-audit' ), true );
+	}
+
+	/**
+	 * Return to the Alt Text screen with a one-time result notice.
+	 *
+	 * @param string $message The notice text, shown once via the query arg.
+	 * @param bool   $ok       Whether the action succeeded.
+	 */
+	private function redirect_to_alt( string $message, bool $ok ): void {
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'              => self::SLUG . '-alt',
+					'janitorix_result'  => $ok ? 'ok' : 'refused',
+					'janitorix_message' => rawurlencode( $message ),
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
 	}
 
 	/**

@@ -37,7 +37,11 @@ delete_option( 'janitorix_review' );
 // date the next time one is added.
 $janitorix_meta_keys = array_merge(
 	array( JanitorixMediaAudit\Core\UserDecisions::meta_key() ),
-	JanitorixMediaAudit\Media\MediaFacts::meta_keys()
+	JanitorixMediaAudit\Media\MediaFacts::meta_keys(),
+	array(
+		JanitorixMediaAudit\AltText\AltDecisions::meta_key(),
+		JanitorixMediaAudit\AltText\AltUndo::meta_key(),
+	)
 );
 
 foreach ( $janitorix_meta_keys as $janitorix_meta_key ) {
