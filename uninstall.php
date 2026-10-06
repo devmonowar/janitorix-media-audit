@@ -28,6 +28,7 @@ JanitorixMediaAudit\Database\Tables::drop();
 delete_option( 'janitorix_schema_version' );
 delete_option( 'janitorix_settings' );
 delete_option( 'janitorix_review' );
+delete_option( JanitorixMediaAudit\AltText\Ai\AiSettings::option_name() );
 
 // Anything the plugin wrote onto attachments rather than into its own tables:
 // the user's decisions, which live there so they outlive a rebuild, and the
@@ -47,3 +48,22 @@ $janitorix_meta_keys = array_merge(
 foreach ( $janitorix_meta_keys as $janitorix_meta_key ) {
 	delete_post_meta_by_key( $janitorix_meta_key );
 }
+
+// The AI's parked suggestions and cached answers live in transients, which
+// have no registry to ask — both the value row and its timeout row go, by
+// prefix. On an external object cache there is nothing to sweep (transients
+// may never touch the options table), which is why those TTLs stay short: a
+// leftover there evaporates on its own within days, not years.
+global $wpdb;
+
+$janitorix_transient_like = $wpdb->esc_like( '_transient_' . JanitorixMediaAudit\AltText\Ai\AiCache::PREFIX ) . '%';
+$janitorix_timeout_like   = $wpdb->esc_like( '_transient_timeout_' . JanitorixMediaAudit\AltText\Ai\AiCache::PREFIX ) . '%';
+
+$wpdb->query(
+	$wpdb->prepare(
+		'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s',
+		$wpdb->options,
+		$janitorix_transient_like,
+		$janitorix_timeout_like
+	)
+);

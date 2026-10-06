@@ -1,6 +1,6 @@
 {
 	"name": "devmonowar/janitorix-media-audit",
-	"description": "Finds unused images in your media library — and proves they are unused before recommending anything. Confidence score, risk level, safe delete.",
+	"description": "Finds unused images and proves it — confidence, risk, safe delete. Plus an alt text audit with optional AI suggestions.",
 	"type": "wordpress-plugin",
 	"keywords": [
 		"wordpress",
@@ -12,7 +12,9 @@
 		"cleanup",
 		"audit",
 		"storage",
-		"housekeeping"
+		"housekeeping",
+		"alt-text",
+		"accessibility"
 	],
 	"homepage": "https://devmonowar.github.io/janitorix-media-audit/",
 	"license": "GPL-2.0-or-later",
@@ -69,7 +71,9 @@
 			"php tests/scan-history.php",
 			"php tests/declared-image-fields.php",
 			"php tests/csv-escaping.php",
-			"php tests/alt-text.php"
+			"php tests/alt-text.php",
+			"php tests/alt-ai.php",
+			"php tests/alt-ai-provider.php"
 		],
 		"check": [
 			"@test",

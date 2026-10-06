@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Janitorix Media Audit\n"
 "Report-Msgid-Bugs-To: https://github.com/devmonowar/janitorix-media-audit/issues\n"
-"POT-Creation-Date: 2026-10-05 17:16+0000\n"
+"POT-Creation-Date: 2026-10-06 16:57+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2026-10-05 17:16+0000\n"
+"PO-Revision-Date: 2026-10-06 16:57+0000\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Domain: janitorix-media-audit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -89,7 +89,7 @@ msgid_plural "%d distinct checks were performed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Menuphp:552
+#: src/Admin/Menuphp:560
 msgid "%d had no suggestion and was skipped."
 msgid_plural "%d had no suggestion and were skipped."
 msgstr[0] ""
@@ -107,13 +107,13 @@ msgid_plural "%d images have been deleted while something still points at them. 
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Menuphp:415
+#: src/Admin/Menuphp:423
 msgid "%d image moved to Trash."
 msgid_plural "%d images moved to Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Menuphp:542
+#: src/Admin/Menuphp:550
 msgid "%d image updated."
 msgid_plural "%d images updated."
 msgstr[0] ""
@@ -143,7 +143,7 @@ msgid_plural "%d unused images scored High or Critical risk — these need a hum
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Menuphp:424
+#: src/Admin/Menuphp:432
 msgid "%d was held back — open it to see why."
 msgid_plural "%d were held back — open them to see why."
 msgstr[0] ""
@@ -189,7 +189,7 @@ msgstr ""
 msgid "%s risk."
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:308
+#: src/Admin/Pages/AltTextPagephp:396
 msgid "+%d more"
 msgstr ""
 
@@ -213,6 +213,26 @@ msgstr ""
 msgid "A weak reference was found — not enough to prove use, enough to stop a deletion."
 msgstr ""
 
+#: src/Admin/Menuphp:856
+msgid "AI suggestion dismissed."
+msgstr ""
+
+#: src/Admin/Menuphp:832
+msgid "AI suggestion ready — review it before applying."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:155
+msgid "AI suggestions (optional)"
+msgstr ""
+
+#: src/Admin/Pages/AltTextPagephp:658
+msgid "AI: %s"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:184
+msgid "API key"
+msgstr ""
+
 #: src/Admin/Pages/ImageDetailsPagephp:819
 msgid "Action"
 msgstr ""
@@ -221,12 +241,20 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:139
+#: src/Admin/Pages/AltTextPagephp:146
 msgid "All"
 msgstr ""
 
-#: src/Admin/Menuphp:130 src/Admin/Menuphp:131 src/Admin/Pages/AltTextPagephp:49 src/Admin/Pages/DashboardPagephp:78
+#: src/Admin/Menuphp:134 src/Admin/Menuphp:135 src/Admin/Pages/AltTextPagephp:49 src/Admin/Pages/DashboardPagephp:78
 msgid "Alt Text"
+msgstr ""
+
+#: src/Admin/Pages/AltTextPagephp:319 src/Admin/Pages/AltTextPagephp:369
+msgid "Alt text"
+msgstr ""
+
+#: src/Admin/Menuphp:688
+msgid "Alt text saved. Undo is available if it reads wrong."
 msgstr ""
 
 #: src/Admin/Pages/ImageDetailsPagephp:443
@@ -257,15 +285,11 @@ msgstr ""
 msgid "Any status"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:224
+#: src/Admin/Pages/AltTextPagephp:230 src/Admin/Pages/AltTextPagephp:323
 msgid "Apply"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:338
-msgid "Apply suggestion"
-msgstr ""
-
-#: src/Admin/Pages/AltTextPagephp:220
+#: src/Admin/Pages/AltTextPagephp:226
 msgid "Apply suggestions"
 msgstr ""
 
@@ -279,6 +303,10 @@ msgstr ""
 
 #: src/Admin/Pages/ImageDetailsPagephp:421 src/Reports/ScanExportphp:136
 msgid "Attachment ID"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:168
+msgid "Base URL"
 msgstr ""
 
 #: src/Admin/Pages/SettingsPagephp:97
@@ -301,11 +329,11 @@ msgstr ""
 msgid "Below the %d%% floor — no deletion is recommended at any confidence"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:218
+#: src/Admin/Pages/AltTextPagephp:224
 msgid "Bulk action"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:219
+#: src/Admin/Pages/AltTextPagephp:225
 msgid "Bulk actions"
 msgstr ""
 
@@ -313,7 +341,7 @@ msgstr ""
 msgid "Cache scan results"
 msgstr ""
 
-#: src/Admin/Menuphp:537
+#: src/Admin/Menuphp:545
 msgid "Choose a bulk action first."
 msgstr ""
 
@@ -321,7 +349,7 @@ msgstr ""
 msgid "Clear decision"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:222
+#: src/Admin/Pages/AltTextPagephp:228
 msgid "Clear decorative"
 msgstr ""
 
@@ -365,6 +393,10 @@ msgstr ""
 msgid "Confirm before trashing"
 msgstr ""
 
+#: src/Admin/Menuphp:733
+msgid "Connection works — the model saw: \"%s\"."
+msgstr ""
+
 #: src/Scanner/ContentScannerphp:162
 msgid "Content uses shortcodes no plugin on this site registers, so what they render could not be read: %s."
 msgstr ""
@@ -401,11 +433,11 @@ msgstr ""
 msgid "Current alt"
 msgstr ""
 
-#: src/Admin/Menuphp:103 src/Admin/Menuphp:104
+#: src/Admin/Menuphp:107 src/Admin/Menuphp:108
 msgid "Dashboard"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:210
+#: src/Admin/Pages/SettingsPagephp:291
 msgid "Database"
 msgstr ""
 
@@ -413,13 +445,13 @@ msgstr ""
 msgid "Debug mode"
 msgstr ""
 
-#: src/Admin/Menuphp:264
+#: src/Admin/Menuphp:272
 msgid "Decision recorded for %d image."
 msgid_plural "Decision recorded for %d images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Pages/AltTextPagephp:142 src/Admin/Pages/AltTextPagephp:516
+#: src/Admin/Pages/AltTextPagephp:149 src/Admin/Pages/AltTextPagephp:633
 msgid "Decorative"
 msgstr ""
 
@@ -447,7 +479,7 @@ msgstr ""
 msgid "Deletion"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:195
+#: src/Admin/Pages/SettingsPagephp:276
 msgid "Diagnostics"
 msgstr ""
 
@@ -459,6 +491,10 @@ msgstr ""
 msgid "Dimensions"
 msgstr ""
 
+#: src/Admin/Pages/AltTextPagephp:351
+msgid "Dismiss"
+msgstr ""
+
 #: src/Admin/Pages/HistoryPagephp:66
 msgid "Duration"
 msgstr ""
@@ -467,11 +503,19 @@ msgstr ""
 msgid "Effect"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:155
+#: src/Admin/Menuphp:708 src/Admin/Menuphp:796 src/AltText/Ai/OpenAiCompatibleAdapterphp:217
+msgid "Enable AI and save a key and a model name first."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:161
+msgid "Enable AI suggestions"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:229
 msgid "Enabled"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:219
+#: src/Admin/Pages/SettingsPagephp:300
 msgid "Enabled."
 msgstr ""
 
@@ -493,6 +537,10 @@ msgstr ""
 
 #: src/Admin/Pages/SettingsPagephp:67
 msgid "Every table and option this plugin created is removed. Your media is never touched."
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:177
+msgid "Exactly as the provider names it. Never defaulted — a wrong default bills you for the wrong model."
 msgstr ""
 
 #: src/Admin/Pages/HistoryPagephp:323
@@ -611,7 +659,7 @@ msgstr ""
 msgid "Go to the dashboard"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:527 src/Reports/HealthScorephp:128
+#: src/Admin/Pages/AltTextPagephp:644 src/Reports/HealthScorephp:128
 msgid "Good"
 msgstr ""
 
@@ -667,7 +715,7 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
-#: src/Admin/Menuphp:149 src/Admin/Menuphp:150 src/Admin/Pages/ImageDetailsPagephp:56
+#: src/Admin/Menuphp:153 src/Admin/Menuphp:154 src/Admin/Pages/ImageDetailsPagephp:56
 msgid "Image Details"
 msgstr ""
 
@@ -675,7 +723,7 @@ msgstr ""
 msgid "Image details sections"
 msgstr ""
 
-#: src/Admin/Menuphp:112 src/Admin/Menuphp:113 src/Admin/Pages/DashboardPagephp:138 src/Admin/Pages/HistoryPagephp:62 src/Admin/Pages/ImagesPagephp:51
+#: src/Admin/Menuphp:116 src/Admin/Menuphp:117 src/Admin/Pages/DashboardPagephp:138 src/Admin/Pages/HistoryPagephp:62 src/Admin/Pages/ImagesPagephp:51
 msgid "Images"
 msgstr ""
 
@@ -711,11 +759,11 @@ msgstr ""
 msgid "Its %1$d×%2$d generated sizes are destroyed with it."
 msgstr ""
 
-#: src/Admin/Menuphp:86
+#: src/Admin/Menuphp:90
 msgid "Janitorix"
 msgstr ""
 
-#: src/Admin/Menuphp:85 src/Admin/Pages/DashboardPagephp:36
+#: src/Admin/Menuphp:89 src/Admin/Pages/DashboardPagephp:36
 msgid "Janitorix Media Audit"
 msgstr ""
 
@@ -767,11 +815,11 @@ msgstr ""
 msgid "Mark Safe — never treat it as unused"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:221 src/Admin/Pages/AltTextPagephp:343
+#: src/Admin/Pages/AltTextPagephp:227 src/Admin/Pages/AltTextPagephp:435
 msgid "Mark decorative"
 msgstr ""
 
-#: src/Admin/Menuphp:468
+#: src/Admin/Menuphp:476
 msgid "Marked as decorative."
 msgstr ""
 
@@ -791,7 +839,7 @@ msgstr ""
 msgid "Media health"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:217
+#: src/Admin/Pages/SettingsPagephp:298
 msgid "Media trash"
 msgstr ""
 
@@ -799,8 +847,12 @@ msgstr ""
 msgid "Medium"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:140 src/Admin/Pages/AltTextPagephp:520
+#: src/Admin/Pages/AltTextPagephp:147 src/Admin/Pages/AltTextPagephp:637
 msgid "Missing"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:175
+msgid "Model"
 msgstr ""
 
 #: src/Admin/Pages/ImagesPagephp:147
@@ -831,6 +883,10 @@ msgstr ""
 msgid "Moving an image to Trash is reversible: a restore record is written before anything is touched, so it can be brought back even if WordPress has no media trash configured."
 msgstr ""
 
+#: src/Admin/Pages/SettingsPagephp:170
+msgid "Must start with https://. Works with any OpenAI-compatible endpoint."
+msgstr ""
+
 #: src/Admin/Pages/DashboardPagephp:140
 msgid "Need review"
 msgstr ""
@@ -859,11 +915,15 @@ msgstr ""
 msgid "No images match these filters."
 msgstr ""
 
-#: src/Admin/Menuphp:400 src/Admin/Menuphp:500
+#: src/Admin/Menuphp:408 src/Admin/Menuphp:508
 msgid "No images were selected."
 msgstr ""
 
-#: src/Admin/Menuphp:472
+#: src/Admin/Pages/SettingsPagephp:188
+msgid "No key saved yet."
+msgstr ""
+
+#: src/Admin/Menuphp:480
 msgid "No longer marked as decorative."
 msgstr ""
 
@@ -915,7 +975,7 @@ msgstr ""
 msgid "No such attachment."
 msgstr ""
 
-#: src/Admin/Menuphp:567
+#: src/Admin/Menuphp:575
 msgid "No suggestion worth applying for that image."
 msgstr ""
 
@@ -927,11 +987,11 @@ msgstr ""
 msgid "Not built yet"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:342
+#: src/Admin/Pages/AltTextPagephp:434
 msgid "Not decorative"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:220
+#: src/Admin/Pages/SettingsPagephp:301
 msgid "Not enabled by your site. This plugin trashes images directly, so removals stay reversible either way, and it writes a restore record before touching anything. Recovery does not depend on this setting."
 msgstr ""
 
@@ -959,7 +1019,7 @@ msgstr ""
 msgid "Nothing scanned yet"
 msgstr ""
 
-#: src/Admin/Menuphp:603
+#: src/Admin/Menuphp:613
 msgid "Nothing to undo for that image."
 msgstr ""
 
@@ -995,7 +1055,7 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:200
+#: src/Admin/Pages/SettingsPagephp:281
 msgid "PHP"
 msgstr ""
 
@@ -1019,7 +1079,7 @@ msgstr ""
 msgid "Permanently deleted."
 msgstr ""
 
-#: src/Admin/Pages/HistoryPagephp:261 src/Admin/Pages/SettingsPagephp:198
+#: src/Admin/Pages/HistoryPagephp:261 src/Admin/Pages/SettingsPagephp:279
 msgid "Plugin version"
 msgstr ""
 
@@ -1049,6 +1109,10 @@ msgstr ""
 
 #: src/Admin/ReviewNoticephp:159
 msgid "Rate it ★★★★★"
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:209
+msgid "Rate limited — the service asked us to slow down. Wait a little and try again."
 msgstr ""
 
 #: src/Admin/Pages/DashboardPagephp:252
@@ -1151,6 +1215,10 @@ msgstr ""
 msgid "Risk level"
 msgstr ""
 
+#: src/Admin/Pages/SettingsPagephp:156
+msgid "Rule-based suggestions always work and need nothing here. If you want a second opinion from an AI model, enable it below with your own API key — the plugin ships none."
+msgstr ""
+
 #: src/Admin/Pages/DashboardPagephp:147
 msgid "Run a new scan"
 msgstr ""
@@ -1167,8 +1235,16 @@ msgstr ""
 msgid "SVG — almost never a content photo"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:136
+#: src/Admin/Pages/AltTextPagephp:373
+msgid "Save"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:138
 msgid "Save settings"
+msgstr ""
+
+#: src/Admin/Pages/SettingsPagephp:187
+msgid "Saved key ending in %s. Leave blank to keep it."
 msgstr ""
 
 #: src/Admin/Pages/HistoryPagephp:59
@@ -1179,7 +1255,7 @@ msgstr ""
 msgid "Scan #%d"
 msgstr ""
 
-#: src/Admin/Menuphp:121 src/Admin/Menuphp:122 src/Admin/Pages/HistoryPagephp:49
+#: src/Admin/Menuphp:125 src/Admin/Menuphp:126 src/Admin/Pages/HistoryPagephp:49
 msgid "Scan History"
 msgstr ""
 
@@ -1207,7 +1283,7 @@ msgstr ""
 msgid "Scanners"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:259
+#: src/Admin/Pages/AltTextPagephp:288
 msgid "Select %s"
 msgstr ""
 
@@ -1219,7 +1295,7 @@ msgstr ""
 msgid "Select all images on this page"
 msgstr ""
 
-#: src/Admin/Menuphp:714
+#: src/Admin/Menuphp:959
 msgid "Select at least one image first."
 msgstr ""
 
@@ -1227,11 +1303,11 @@ msgstr ""
 msgid "Select every image on this page that may be trashed"
 msgstr ""
 
-#: src/Admin/Menuphp:75 src/Admin/Menuphp:139 src/Admin/Menuphp:140 src/Admin/Pages/SettingsPagephp:33
+#: src/Admin/Menuphp:79 src/Admin/Menuphp:143 src/Admin/Menuphp:144 src/Admin/Pages/SettingsPagephp:33
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:187
+#: src/Admin/Pages/SettingsPagephp:258
 msgid "Settings saved."
 msgstr ""
 
@@ -1299,15 +1375,19 @@ msgstr ""
 msgid "Strongest evidence scored %d."
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:283
-msgid "Suggested from %s"
+#: src/Admin/Pages/AltTextPagephp:453
+msgid "Suggest with AI"
+msgstr ""
+
+#: src/Admin/Pages/AltTextPagephp:330
+msgid "Suggested from %s — edit freely"
 msgstr ""
 
 #: src/Admin/Pages/AltTextPagephp:206
 msgid "Suggestion"
 msgstr ""
 
-#: src/Admin/Menuphp:570
+#: src/Admin/Menuphp:578
 msgid "Suggestion applied. Undo is available if it reads wrong."
 msgstr ""
 
@@ -1315,24 +1395,44 @@ msgstr ""
 msgid "System"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:213
+#: src/Admin/Pages/SettingsPagephp:294
 msgid "Tables missing — deactivate and reactivate the plugin."
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:212
+#: src/Admin/Pages/SettingsPagephp:293
 msgid "Tables present."
 msgstr ""
 
-#: src/Admin/Menuphp:459
+#: src/Admin/Pages/SettingsPagephp:209
+msgid "Test connection"
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:224
+msgid "That image could not be prepared."
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:221
+msgid "That image is too large to send."
+msgstr ""
+
+#: src/Admin/Menuphp:467 src/Admin/Menuphp:671 src/Admin/Menuphp:779
 msgid "That image no longer exists."
 msgstr ""
 
-#: src/Admin/Menuphp:290
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:219
+msgid "That image type cannot be sent (SVG and non-images are refused)."
+msgstr ""
+
+#: src/Admin/Menuphp:298
 msgid "That scan is no longer stored."
 msgstr ""
 
 #: src/Admin/Pages/HistoryPagephp:175
 msgid "That scan is no longer stored. Only the 50 most recent are kept."
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:215
+msgid "The base URL must start with https://."
 msgstr ""
 
 #: src/Cleanup/CleanupEnginephp:225
@@ -1347,8 +1447,20 @@ msgstr ""
 msgid "The image was not moved to Trash. Nothing has been reported as done that was not done."
 msgstr ""
 
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:207
+msgid "The key was rejected. Check the key and try Test connection."
+msgstr ""
+
 #: src/Reports/HealthScorephp:56
 msgid "The media library is empty."
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:226
+msgid "The model answered with nothing usable. Try again."
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:211
+msgid "The model name was not recognized. Check the model name."
 msgstr ""
 
 #: src/Safety/SafetyEnginephp:151
@@ -1359,8 +1471,20 @@ msgstr ""
 msgid "The plugin is designed to work correctly without changing anything here. Most people should scan and clean without opening this page at all."
 msgstr ""
 
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:205
+msgid "The request timed out after 30 seconds. Try again."
+msgstr ""
+
 #: src/Admin/Pages/ImagesPagephp:588
 msgid "The scan found these images and its verdict still stands — a safety rule is refusing the action, so no checkbox is offered. Open an image to see its full reasoning."
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:228
+msgid "The service answered unexpectedly. Try again."
+msgstr ""
+
+#: src/AltText/Ai/OpenAiCompatibleAdapterphp:213
+msgid "The service could not be reached. Check the base URL."
 msgstr ""
 
 #: src/Safety/SafetyEnginephp:115
@@ -1467,11 +1591,11 @@ msgstr ""
 msgid "USED — found in %s"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:346
+#: src/Admin/Pages/AltTextPagephp:438
 msgid "Undo"
 msgstr ""
 
-#: src/Admin/Menuphp:609
+#: src/Admin/Menuphp:619
 msgid "Undone — the previous alt text is back."
 msgstr ""
 
@@ -1479,7 +1603,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: src/Admin/Menuphp:363 src/Admin/Menuphp:478 src/Safety/SafetyEnginephp:79
+#: src/Admin/Menuphp:371 src/Admin/Menuphp:486 src/Safety/SafetyEnginephp:79
 msgid "Unknown action."
 msgstr ""
 
@@ -1553,7 +1677,7 @@ msgstr ""
 msgid "We cannot tell you this is safe to delete. We can only tell you we did not find it."
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:141 src/Admin/Pages/AltTextPagephp:524
+#: src/Admin/Pages/AltTextPagephp:148 src/Admin/Pages/AltTextPagephp:641
 msgid "Weak"
 msgstr ""
 
@@ -1577,6 +1701,10 @@ msgstr ""
 msgid "When"
 msgstr ""
 
+#: src/Admin/Pages/SettingsPagephp:162
+msgid "When enabled, each image gets a resized copy (max 1024px), its filename and its parent post title sent to the service above. The service may use that data under its own terms."
+msgstr ""
+
 #: src/Admin/Pages/HistoryPagephp:367 src/Admin/Pages/ImageDetailsPagephp:484
 msgid "Where"
 msgstr ""
@@ -1597,8 +1725,12 @@ msgstr ""
 msgid "WooCommerce Settings"
 msgstr ""
 
-#: src/Admin/Pages/SettingsPagephp:199
+#: src/Admin/Pages/SettingsPagephp:280
 msgid "WordPress"
+msgstr ""
+
+#: src/Admin/Menuphp:675
+msgid "Write some alt text first — or mark the image decorative instead."
 msgstr ""
 
 #: src/Admin/ReviewNoticephp:152
@@ -1609,27 +1741,31 @@ msgstr ""
 msgid "You asked to skip this image during reviews."
 msgstr ""
 
-#: src/Admin/Menuphp:192
+#: src/Admin/Menuphp:196
 msgid "You do not have permission to change these settings."
 msgstr ""
 
-#: src/Admin/Menuphp:222
+#: src/Admin/Menuphp:230
 msgid "You do not have permission to change this."
 msgstr ""
 
-#: src/Admin/Menuphp:306
+#: src/Admin/Menuphp:314
 msgid "You do not have permission to delete a scan record."
 msgstr ""
 
-#: src/Admin/Menuphp:338 src/Admin/Menuphp:392 src/Admin/Menuphp:448 src/Admin/Menuphp:491
+#: src/Admin/Menuphp:346 src/Admin/Menuphp:400 src/Admin/Menuphp:456 src/Admin/Menuphp:499 src/Admin/Menuphp:662 src/Admin/Menuphp:700 src/Admin/Menuphp:771 src/Admin/Menuphp:843
 msgid "You do not have permission to do that."
 msgstr ""
 
-#: src/Admin/Menuphp:279
+#: src/Admin/Menuphp:785
+msgid "You do not have permission to edit that image."
+msgstr ""
+
+#: src/Admin/Menuphp:287
 msgid "You do not have permission to export a scan."
 msgstr ""
 
-#: src/Admin/Menuphp:163
+#: src/Admin/Menuphp:167
 msgid "You do not have permission to run a scan."
 msgstr ""
 
@@ -1669,11 +1805,11 @@ msgstr ""
 msgid "curated metadata (alt / caption)"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:537
+#: src/Admin/Pages/AltTextPagephp:664
 msgid "filename"
 msgstr ""
 
-#: src/Admin/Menuphp:715
+#: src/Admin/Menuphp:960
 msgid "image(s) will be moved to Trash. They can be restored afterwards. Continue?"
 msgstr ""
 
@@ -1683,6 +1819,10 @@ msgstr ""
 
 #: src/Risk/RiskEnginephp:298
 msgid "lives outside the uploads folder"
+msgstr ""
+
+#: src/Admin/Pages/AltTextPagephp:659
+msgid "model"
 msgstr ""
 
 #: src/Admin/Pages/HistoryPagephp:257
@@ -1697,7 +1837,7 @@ msgstr ""
 msgid "no scanner built for this yet"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:539
+#: src/Admin/Pages/AltTextPagephp:666
 msgid "parent post"
 msgstr ""
 
@@ -1749,7 +1889,7 @@ msgstr ""
 msgid "the site logo"
 msgstr ""
 
-#: src/Admin/Pages/AltTextPagephp:538
+#: src/Admin/Pages/AltTextPagephp:665
 msgid "title"
 msgstr ""
 

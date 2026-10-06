@@ -10,6 +10,8 @@ with the maintainer for anything deeper.
 - **[Staying Safe](staying-safe.md)** — what the plugin will never do, how Trash and Restore work,
   and why some images can't be selected for deletion at all
 - **[FAQ](faq.md)** — quick answers to the questions people ask most
+- **[Alt text](alt-text.md)** — the Missing/Weak/Decorative list, suggestions,
+  undo, and the optional AI — plus `wp janitorix alt stats`
 
 For installation requirements, the full changelog, and the short-form FAQ, see the plugin's
 `readme.txt` — that's also what shows up on the plugin's WordPress.org-style listing page.

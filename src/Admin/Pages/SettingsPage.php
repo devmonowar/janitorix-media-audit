@@ -133,7 +133,81 @@ final class SettingsPage {
 
 		echo '</tbody></table></details>';
 
+		$this->ai_section();
+
 		submit_button( __( 'Save settings', 'janitorix-media-audit' ) );
+		echo '</form>';
+
+		$this->ai_test_button();
+	}
+
+	/**
+	 * The optional AI, inside the same save form.
+	 *
+	 * Everything the main form posts is saved by the same handler — the AI
+	 * keys ride along in AiSettings::save(), never in Settings::save(), so
+	 * the key cannot end up in the ordinary settings option. The key field
+	 * always renders empty: the saved key is never sent to the browser.
+	 */
+	private function ai_section(): void {
+		$ai = \JanitorixMediaAudit\AltText\Ai\AiSettings::get();
+
+		echo '<h2>' . esc_html__( 'AI suggestions (optional)', 'janitorix-media-audit' ) . '</h2>';
+		echo '<p>' . esc_html__( 'Rule-based suggestions always work and need nothing here. If you want a second opinion from an AI model, enable it below with your own API key — the plugin ships none.', 'janitorix-media-audit' ) . '</p>';
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		$this->toggle(
+			'janitorix_alt_ai_enabled',
+			__( 'Enable AI suggestions', 'janitorix-media-audit' ),
+			__( 'When enabled, each image gets a resized copy (max 1024px), its filename and its parent post title sent to the service above. The service may use that data under its own terms.', 'janitorix-media-audit' ),
+			$ai['enabled']
+		);
+
+		printf(
+			'<tr><th scope="row"><label for="janitorix-alt-ai-base-url">%s</label></th><td><input type="url" id="janitorix-alt-ai-base-url" name="janitorix_alt_ai_base_url" value="%s" class="regular-text" inputmode="url"><p class="description">%s</p></td></tr>',
+			esc_html__( 'Base URL', 'janitorix-media-audit' ),
+			esc_attr( $ai['base_url'] ),
+			esc_html__( 'Must start with https://. Works with any OpenAI-compatible endpoint.', 'janitorix-media-audit' )
+		);
+
+		printf(
+			'<tr><th scope="row"><label for="janitorix-alt-ai-model">%s</label></th><td><input type="text" id="janitorix-alt-ai-model" name="janitorix_alt_ai_model" value="%s" class="regular-text" autocomplete="off"><p class="description">%s</p></td></tr>',
+			esc_html__( 'Model', 'janitorix-media-audit' ),
+			esc_attr( $ai['model'] ),
+			esc_html__( 'Exactly as the provider names it. Never defaulted — a wrong default bills you for the wrong model.', 'janitorix-media-audit' )
+		);
+
+		$masked = \JanitorixMediaAudit\AltText\Ai\AiSettings::masked();
+
+		printf(
+			'<tr><th scope="row"><label for="janitorix-alt-ai-key">%s</label></th><td><input type="password" id="janitorix-alt-ai-key" name="janitorix_alt_ai_key" value="" class="regular-text" autocomplete="new-password"><p class="description">%s</p></td></tr>',
+			esc_html__( 'API key', 'janitorix-media-audit' ),
+			'' !== $masked
+				/* translators: %s: masked key ending, e.g. ••••••••1234 */
+				? esc_html( sprintf( __( 'Saved key ending in %s. Leave blank to keep it.', 'janitorix-media-audit' ), $masked ) )
+				: esc_html__( 'No key saved yet.', 'janitorix-media-audit' )
+		);
+
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * The Test connection button: its own form, outside the save form.
+	 *
+	 * Sends the embedded sample image — nothing of the user's — and reports
+	 * whether the model described it.
+	 */
+	private function ai_test_button(): void {
+		printf(
+			'<form method="post" action="%s" style="margin-top:8px">',
+			esc_url( admin_url( 'admin-post.php' ) )
+		);
+		wp_nonce_field( 'janitorix_alt_ai_test' );
+		echo '<input type="hidden" name="action" value="janitorix_alt_ai_test">';
+		printf(
+			'<input type="submit" class="button" value="%s">',
+			esc_attr__( 'Test connection', 'janitorix-media-audit' )
+		);
 		echo '</form>';
 	}
 
@@ -175,17 +249,24 @@ final class SettingsPage {
 		);
 	}
 
-	/** The one-time "Settings saved" banner after a redirect. */
+	/** The one-time banners after a redirect: saved settings, or a test result. */
 	private function result_notice(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display only.
-		if ( empty( $_GET['janitorix_saved'] ) ) {
-			return;
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only display of redirect results; the actions were nonce-verified before redirecting.
+		if ( isset( $_GET['janitorix_saved'] ) ) {
+			printf(
+				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+				esc_html__( 'Settings saved.', 'janitorix-media-audit' )
+			);
 		}
 
-		printf(
-			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-			esc_html__( 'Settings saved.', 'janitorix-media-audit' )
-		);
+		if ( ! empty( $_GET['janitorix_result'] ) ) {
+			printf(
+				'<div class="notice notice-%s is-dismissible"><p>%s</p></div>',
+				'ok' === $_GET['janitorix_result'] ? 'success' : 'warning',
+				esc_html( rawurldecode( isset( $_GET['janitorix_message'] ) ? sanitize_text_field( wp_unslash( $_GET['janitorix_message'] ) ) : '' ) )
+			);
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/** Environment facts that matter when something goes wrong. */

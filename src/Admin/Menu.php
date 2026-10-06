@@ -57,6 +57,10 @@ final class Menu {
 		add_action( 'admin_post_janitorix_alt_row', array( $this, 'handle_alt_row' ) );
 		add_action( 'admin_post_janitorix_alt_bulk', array( $this, 'handle_alt_bulk' ) );
 		add_action( 'admin_post_janitorix_alt_custom', array( $this, 'handle_alt_custom' ) );
+		add_action( 'admin_post_janitorix_alt_ai_test', array( $this, 'handle_alt_ai_test' ) );
+		add_action( 'admin_post_janitorix_alt_ai_suggest', array( $this, 'handle_alt_ai_suggest' ) );
+		add_action( 'admin_post_janitorix_alt_ai_dismiss', array( $this, 'handle_alt_ai_dismiss' ) );
+		add_action( 'wp_ajax_janitorix_alt_ai_suggest_ajax', array( $this, 'handle_alt_ai_suggest_ajax' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( JANITORIX_FILE ), array( $this, 'add_settings_link' ) );
 	}
@@ -197,6 +201,10 @@ final class Menu {
 
 		// Settings::save() decides what is storable; everything else is dropped.
 		Settings::save( wp_unslash( $_POST ) );
+
+		// The AI keys ride in the same POST but are saved apart — never in
+		// the ordinary settings option. See AiSettings for why.
+		\JanitorixMediaAudit\AltText\Ai\AiSettings::save( wp_unslash( $_POST ) );
 
 		wp_safe_redirect(
 			add_query_arg(
@@ -589,6 +597,8 @@ final class Menu {
 		AltUndo::save( $attachment_id, is_string( $current ) ? $current : '' );
 		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $suggestion['text'] );
 
+		\JanitorixMediaAudit\AltText\Ai\AiCache::clear_pending( get_current_user_id(), $attachment_id );
+
 		return true;
 	}
 
@@ -671,7 +681,271 @@ final class Menu {
 		AltUndo::save( $attachment_id, is_string( $current ) ? $current : '' );
 		update_post_meta( $attachment_id, '_wp_attachment_image_alt', RuleBasedProvider::cap_text( $text ) );
 
+		// A hand-applied textbox replaces any parked AI suggestion — whether
+		// the box held the AI's words edited or wholly new ones, there is
+		// nothing left to park.
+		\JanitorixMediaAudit\AltText\Ai\AiCache::clear_pending( get_current_user_id(), $attachment_id );
+
 		$this->redirect_to_alt( __( 'Alt text saved. Undo is available if it reads wrong.', 'janitorix-media-audit' ), true );
+	}
+
+	/**
+	 * Test the AI connection with the embedded sample image.
+	 *
+	 * Nothing of the user's library leaves the site here — the sample travels
+	 * with the plugin precisely so this button cannot become a data leak. A
+	 * described red square means key, endpoint, model and vision all work.
+	 */
+	public function handle_alt_ai_test(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You do not have permission to do that.', 'janitorix-media-audit' ) );
+		}
+
+		check_admin_referer( 'janitorix_alt_ai_test' );
+
+		$adapter = \JanitorixMediaAudit\AltText\Ai\AiSettings::adapter();
+
+		if ( null === $adapter ) {
+			$this->redirect_to_settings( __( 'Enable AI and save a key and a model name first.', 'janitorix-media-audit' ), false );
+		}
+
+		$result = $adapter->complete(
+			\JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider::build_messages(
+				array(
+					'filename'     => 'sample.png',
+					'title'        => '',
+					'parent_title' => '',
+				),
+				array(
+					'mime'   => \JanitorixMediaAudit\AltText\Ai\SampleImage::MIME,
+					'base64' => \JanitorixMediaAudit\AltText\Ai\SampleImage::BASE64,
+				),
+				get_locale()
+			)
+		);
+
+		if ( ! $result['ok'] ) {
+			$this->redirect_to_settings( \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( $result['error'] ), false );
+		}
+
+		$this->redirect_to_settings(
+			sprintf(
+				/* translators: %s: the model's description of the sample image */
+				__( 'Connection works — the model saw: "%s".', 'janitorix-media-audit' ),
+				\JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider::clean_text( $result['text'] )
+			),
+			true
+		);
+	}
+
+	/**
+	 * Return to the Settings screen with a one-time result notice.
+	 *
+	 * @param string $message The notice text, shown once via the query arg.
+	 * @param bool   $ok       Whether the action succeeded.
+	 */
+	private function redirect_to_settings( string $message, bool $ok ): void {
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'              => self::SLUG . '-settings',
+					'janitorix_result'  => $ok ? 'ok' : 'refused',
+					'janitorix_message' => rawurlencode( $message ),
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Ask the user's AI from JavaScript, without leaving the list.
+	 *
+	 * Same checks, same provider, same cleaning as the redirect flow below —
+	 * both call ai_suggest_for(), so the two paths cannot drift apart. Two
+	 * differences, both deliberate: nothing is parked (the answer goes
+	 * straight into the asking page, and the result cache makes re-asking
+	 * free), and failure arrives as JSON for the button to display.
+	 */
+	public function handle_alt_ai_suggest_ajax(): void {
+		check_ajax_referer( 'janitorix_alt_ai_suggest' );
+
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do that.', 'janitorix-media-audit' ) ), 403 );
+		}
+
+		$attachment_id = isset( $_POST['image'] ) ? absint( wp_unslash( $_POST['image'] ) ) : 0;
+
+		if ( $attachment_id < 1 || null === get_post( $attachment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That image no longer exists.', 'janitorix-media-audit' ) ), 404 );
+		}
+
+		if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to edit that image.', 'janitorix-media-audit' ) ), 403 );
+		}
+
+		$result = $this->ai_suggest_for( $attachment_id );
+
+		if ( null === $result['suggestion'] ) {
+			wp_send_json_error( array( 'message' => $result['message'] ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'text'         => $result['suggestion']['text'],
+				'source_label' => \JanitorixMediaAudit\AltText\SuggestionProviders::source_label( $result['suggestion']['source'] ),
+			)
+		);
+	}
+
+	/**
+	 * Ask the user's AI for one suggestion, then park it for review.
+	 *
+	 * Nothing is saved here — the suggestion waits in a short-lived transient
+	 * and lands in the row's textbox on the redirect back, where the person
+	 * reviews it like any other suggestion. Gated on the attachment-level
+	 * capability before the paid call; there is deliberately no server-side
+	 * rate limit on top of the provider's own quota.
+	 */
+	public function handle_alt_ai_suggest(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You do not have permission to do that.', 'janitorix-media-audit' ) );
+		}
+
+		check_admin_referer( 'janitorix_alt_ai_suggest' );
+
+		$attachment_id = isset( $_POST['image'] ) ? absint( wp_unslash( $_POST['image'] ) ) : 0;
+
+		if ( $attachment_id < 1 || null === get_post( $attachment_id ) ) {
+			$this->redirect_to_alt( __( 'That image no longer exists.', 'janitorix-media-audit' ), false );
+		}
+
+		// The screen itself needs manage_options; touching one image's alt
+		// text needs the same right WordPress demands in the Media Library.
+		if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
+			wp_die( esc_html__( 'You do not have permission to edit that image.', 'janitorix-media-audit' ) );
+		}
+
+		$user_id = get_current_user_id();
+
+		// Through the registry, not constructed here: a third-party provider
+		// registered on the filter is a real citizen of this flow, and the
+		// AI provider itself is only present when the owner enabled it.
+		$result = $this->ai_suggest_for( $attachment_id );
+
+		if ( null === $result['suggestion'] ) {
+			$this->redirect_to_alt_row( $attachment_id, $result['message'], false );
+		}
+
+		$suggestion = $result['suggestion'];
+
+		\JanitorixMediaAudit\AltText\Ai\AiCache::save_pending( $user_id, $attachment_id, $suggestion['text'], $suggestion['source'] );
+
+		$this->redirect_to_alt_row( $attachment_id, __( 'AI suggestion ready — review it before applying.', 'janitorix-media-audit' ), true );
+	}
+
+	/**
+	 * Run one AI ask: the shared core behind the redirect and AJAX flows.
+	 *
+	 * Both handlers check capability and nonce themselves; this does the
+	 * provider work both need — registry lookup, context building, asking,
+	 * validating the answer, naming the source — so the two paths cannot
+	 * drift apart.
+	 *
+	 * @param int $attachment_id The image to ask about.
+	 * @return array{suggestion:array{text:string,source:string}|null,message:string}
+	 */
+	private function ai_suggest_for( int $attachment_id ): array {
+		$providers = \JanitorixMediaAudit\AltText\SuggestionProviders::all();
+
+		if ( ! isset( $providers['ai'] ) ) {
+			return array(
+				'suggestion' => null,
+				'message'    => __( 'Enable AI and save a key and a model name first.', 'janitorix-media-audit' ),
+			);
+		}
+
+		$provider = $providers['ai'];
+		$settings = \JanitorixMediaAudit\AltText\Ai\AiSettings::get();
+
+		$post = get_post( $attachment_id );
+		$file = get_attached_file( $attachment_id );
+
+		$parent_title = 0 !== (int) $post->post_parent ? get_the_title( (int) $post->post_parent ) : '';
+
+		$suggestion = $provider->suggest(
+			array(
+				'attachment_id' => $attachment_id,
+				'filename'      => is_string( $file ) ? wp_basename( $file ) : '',
+				'title'         => (string) $post->post_title,
+				'parent_title'  => is_string( $parent_title ) ? $parent_title : '',
+			)
+		);
+
+		// No server-side rate limit here on purpose: the provider's own
+		// quota governs, and the result cache makes repeat asks free. An
+		// accidental double-click is stopped in the browser (the button
+		// disables on submit); a deliberate second ask is the user's money
+		// to spend.
+		if ( null === $suggestion ) {
+			// last_error() is the AI provider's own vocabulary; a
+			// third-party provider that declines without one gets the
+			// generic answer instead of a fatal.
+			$error = $provider instanceof \JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider ? $provider->last_error() : 'bad-response';
+
+			return array(
+				'suggestion' => null,
+				'message'    => \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( $error ),
+			);
+		}
+
+		// The contract promises text, but a third-party provider is someone
+		// else's code — an answer without words is declined, not parked.
+		if ( ! isset( $suggestion['text'] ) || ! is_string( $suggestion['text'] ) || '' === trim( $suggestion['text'] ) ) {
+			return array(
+				'suggestion' => null,
+				'message'    => \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( 'bad-response' ),
+			);
+		}
+
+		// The label names who answered: the model for ours, the provider id
+		// for a third party's. Never the raw suggestion — labels translate,
+		// suggestions do not.
+		$source = $provider instanceof \JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider
+			? 'ai:' . $settings['model']
+			: (string) $provider->id();
+
+		return array(
+			'suggestion' => array(
+				'text'   => trim( $suggestion['text'] ),
+				'source' => $source,
+			),
+			'message'    => '',
+		);
+	}
+
+	/**
+	 * Throw away a parked AI suggestion without applying it.
+	 *
+	 * A GET link with a nonce, like the other row links: dismissing writes
+	 * nothing and deletes one transient, so there is nothing to confirm.
+	 */
+	public function handle_alt_ai_dismiss(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You do not have permission to do that.', 'janitorix-media-audit' ) );
+		}
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- verified on the next line; reading before verifying would be the violation, not reading itself.
+		$attachment_id = isset( $_GET['image'] ) ? absint( wp_unslash( $_GET['image'] ) ) : 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		check_admin_referer( 'janitorix_alt_ai_dismiss' );
+
+		if ( $attachment_id > 0 ) {
+			\JanitorixMediaAudit\AltText\Ai\AiCache::clear_pending( get_current_user_id(), $attachment_id );
+		}
+
+		$this->redirect_to_alt( __( 'AI suggestion dismissed.', 'janitorix-media-audit' ), true );
 	}
 
 	/**
@@ -687,6 +961,32 @@ final class Menu {
 					'page'              => self::SLUG . '-alt',
 					'janitorix_result'  => $ok ? 'ok' : 'refused',
 					'janitorix_message' => rawurlencode( $message ),
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Return to the Alt Text screen with the notice pinned to one row.
+	 *
+	 * AI asks succeed or fail per image, so a page-wide banner would leave
+	 * the user hunting for which row it was about. The row id travels along
+	 * and the screen renders the message under that row's AI button.
+	 *
+	 * @param int    $attachment_id The row the message belongs to.
+	 * @param string $message       The notice text, shown once via the query arg.
+	 * @param bool   $ok            Whether the action succeeded.
+	 */
+	private function redirect_to_alt_row( int $attachment_id, string $message, bool $ok ): void {
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'              => self::SLUG . '-alt',
+					'janitorix_result'  => $ok ? 'ok' : 'refused',
+					'janitorix_message' => rawurlencode( $message ),
+					'janitorix_ai_row'  => $attachment_id,
 				),
 				admin_url( 'admin.php' )
 			)

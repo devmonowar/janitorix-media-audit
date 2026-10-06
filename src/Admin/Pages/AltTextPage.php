@@ -106,7 +106,14 @@ final class AltTextPage {
 			return;
 		}
 
-		$this->table( $rows, $stats );
+		// An AI ask lands back on the row it was asked from. Only that row
+		// reads a pending suggestion or shows the ask's message — the rest of
+		// the page pays no extra queries for a feature one row just used.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- display only; the ask itself was nonce-verified before the redirect that set these.
+		$ai_row = isset( $_GET['janitorix_ai_row'] ) ? absint( wp_unslash( $_GET['janitorix_ai_row'] ) ) : 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$this->table( $rows, $stats, $ai_row );
 
 		$this->pagination( $total, $page, $filter );
 
@@ -175,10 +182,11 @@ final class AltTextPage {
 	/**
 	 * The list and the bulk form around it.
 	 *
-	 * @param int[]    $rows  Attachment ids on this page.
-	 * @param AltStats $stats The shared counter.
+	 * @param int[]    $rows   Attachment ids on this page.
+	 * @param AltStats $stats  The shared counter.
+	 * @param int      $ai_row Row an AI ask just landed on (0 when none).
 	 */
-	private function table( array $rows, AltStats $stats ): void {
+	private function table( array $rows, AltStats $stats, int $ai_row ): void {
 		$details = $this->details( $rows );
 		$alts    = $stats->alts_for( $rows );
 		$backups = AltUndo::with_backup( $rows );
@@ -201,7 +209,7 @@ final class AltTextPage {
 		echo '</tr></thead><tbody>';
 
 		foreach ( $rows as $id ) {
-			$this->row( (int) $id, $details, $alts, $backups, $used_in, $provider );
+			$this->row( (int) $id, $details, $alts, $backups, $used_in, $provider, $ai_row );
 		}
 
 		echo '</tbody></table>';
@@ -235,18 +243,39 @@ final class AltTextPage {
 	 * @param array<int,true>                $backups   Ids with an undo waiting.
 	 * @param array<int,string[]>            $used_in   Reference labels per id.
 	 * @param RuleBasedProvider              $provider  The suggestion source.
+	 * @param int                            $ai_row    Row an AI ask just landed on (0 when none).
 	 */
-	private function row( int $id, array $details, array $alts, array $backups, array $used_in, RuleBasedProvider $provider ): void {
+	private function row( int $id, array $details, array $alts, array $backups, array $used_in, RuleBasedProvider $provider, int $ai_row ): void {
 		$detail = $details[ $id ] ?? array(
 			'title'  => '',
 			'parent' => 0,
 		);
 
-		$alt        = $alts[ $id ] ?? '';
-		$is_empty   = '' === trim( $alt );
-		$is_deco    = AltDecisions::is_decorative( $id );
-		$weak       = ( ! $is_empty && ! $is_deco ) ? $provider->weak_reason( $alt ) : '';
-		$suggestion = ( $is_empty && ! $is_deco ) || '' !== $weak ? $this->suggestion( $id, $detail, $provider ) : null;
+		$alt          = $alts[ $id ] ?? '';
+		$is_empty     = '' === trim( $alt );
+		$is_deco      = AltDecisions::is_decorative( $id );
+		$weak         = ( ! $is_empty && ! $is_deco ) ? $provider->weak_reason( $alt ) : '';
+		$suggestion   = ( $is_empty && ! $is_deco ) || '' !== $weak ? $this->suggestion( $id, $detail, $provider ) : null;
+		$ai_available = \JanitorixMediaAudit\AltText\Ai\AiSettings::is_available();
+		$ai_pending   = false;
+
+		// A parked AI suggestion surfaces exactly once, on the landing after
+		// the ask: prefilled into the box with its source, then forgotten so
+		// a reload cannot resurrect it.
+		if ( $ai_available && $ai_row === $id ) {
+			$parked = \JanitorixMediaAudit\AltText\Ai\AiCache::get_pending( get_current_user_id(), $id );
+
+			if ( null !== $parked && '' !== trim( $parked['text'] ) ) {
+				\JanitorixMediaAudit\AltText\Ai\AiCache::clear_pending( get_current_user_id(), $id );
+
+				$suggestion = array(
+					'text'   => $parked['text'],
+					'source' => $parked['source'],
+				);
+
+				$ai_pending = true;
+			}
+		}
 
 		printf(
 			'<tr><th scope="row" class="check-column"><input type="checkbox" name="images[]" value="%d" form="janitorix-alt-bulk-form" aria-label="%s"></th>',
@@ -282,17 +311,22 @@ final class AltTextPage {
 			wp_nonce_field( 'janitorix_alt_custom' );
 			echo '<input type="hidden" name="action" value="janitorix_alt_custom">';
 			printf( '<input type="hidden" name="image" value="%d">', (int) $id );
+			// Input and button stay on one line whatever the text length:
+			// the box shrinks, the button never wraps underneath it.
+			echo '<span style="display:inline-flex;gap:6px;align-items:center;max-width:100%">';
 			printf(
-				'<input type="text" name="janitorix_alt_text" value="%s" maxlength="125" size="30" aria-label="%s"> ',
+				'<input type="text" name="janitorix_alt_text" value="%s" maxlength="125" size="30" style="flex:1;min-width:120px" aria-label="%s">',
 				esc_attr( $suggestion['text'] ),
 				esc_attr__( 'Alt text', 'janitorix-media-audit' )
 			);
 			printf(
-				'<input type="submit" class="button" value="%s">',
-				esc_attr__( 'Apply', 'janitorix-media-audit' )
+				'<input type="submit" class="%s" style="flex:none" value="%s">',
+				$ai_pending ? 'button button-primary' : 'button',
+				$ai_pending ? esc_attr__( 'Apply', 'janitorix-media-audit' ) : esc_attr__( 'Save', 'janitorix-media-audit' )
 			);
+			echo '</span>';
 			printf(
-				'<br><small>%s</small>',
+				'<br><small class="janitorix-suggest-source">%s</small>',
 				esc_html(
 					sprintf(
 						/* translators: %s: where the suggestion came from */
@@ -301,6 +335,26 @@ final class AltTextPage {
 					)
 				)
 			);
+
+			if ( $ai_pending ) {
+				printf(
+					' <small><a href="%s">%s</a></small>',
+					esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'action' => 'janitorix_alt_ai_dismiss',
+									'image'  => $id,
+								),
+								admin_url( 'admin-post.php' )
+							),
+							'janitorix_alt_ai_dismiss'
+						)
+					),
+					esc_html__( 'Dismiss', 'janitorix-media-audit' )
+				);
+			}
+
 			echo '</form>';
 		} elseif ( ! $is_empty && ! $is_deco ) {
 			// Good alt, nothing to suggest — but the owner may still want
@@ -312,15 +366,17 @@ final class AltTextPage {
 			wp_nonce_field( 'janitorix_alt_custom' );
 			echo '<input type="hidden" name="action" value="janitorix_alt_custom">';
 			printf( '<input type="hidden" name="image" value="%d">', (int) $id );
+			echo '<span style="display:inline-flex;gap:6px;align-items:center;max-width:100%">';
 			printf(
-				'<input type="text" name="janitorix_alt_text" value="%s" maxlength="125" size="30" aria-label="%s"> ',
+				'<input type="text" name="janitorix_alt_text" value="%s" maxlength="125" size="30" style="flex:1;min-width:120px" aria-label="%s">',
 				esc_attr( $alt ),
 				esc_attr__( 'Alt text', 'janitorix-media-audit' )
 			);
 			printf(
-				'<input type="submit" class="button" value="%s">',
+				'<input type="submit" class="button" style="flex:none" value="%s">',
 				esc_attr__( 'Save', 'janitorix-media-audit' )
 			);
+			echo '</span>';
 			echo '</form>';
 		} else {
 			echo '<span aria-hidden="true">—</span>';
@@ -353,24 +409,30 @@ final class AltTextPage {
 		echo '</td>';
 
 		echo '<td>';
-		$this->row_actions( $id, $is_deco, isset( $backups[ $id ] ) );
+		$this->row_actions( $id, $is_deco, isset( $backups[ $id ] ), $ai_available, $ai_row === $id );
 		echo '</td></tr>';
 	}
 
 	/**
-	 * The row's Decorative / Undo links.
+	 * The row's Decorative / Undo links, and the AI button where enabled.
 	 *
 	 * Applying lives in the suggestion box's own form above — one write path
-	 * per row, not two. These links only flip flags.
+	 * per row, not two. These links only flip flags. The AI button appears
+	 * only when the owner enabled AI and saved a key; a disabled site renders
+	 * exactly like 1.1.0, down to the markup.
 	 *
 	 * GET with a nonce, verified in the handler before anything is written —
-	 * the same shape as core's own Activate / Trash / Delete row links.
+	 * the same shape as core's own Activate / Trash / Delete row links. The
+	 * AI ask itself is a POST form (it spends money); only the dismiss is a
+	 * link, because forgetting a transient needs no confirmation.
 	 *
-	 * @param int  $id       The attachment id.
-	 * @param bool $is_deco  Whether it is declared decorative.
-	 * @param bool $has_undo Whether a backup waits.
+	 * @param int  $id           The attachment id.
+	 * @param bool $is_deco      Whether it is declared decorative.
+	 * @param bool $has_undo     Whether a backup waits.
+	 * @param bool $ai_available Whether AI is enabled and keyed.
+	 * @param bool $ai_landed    Whether an AI ask just landed on this row.
 	 */
-	private function row_actions( int $id, bool $is_deco, bool $has_undo ): void {
+	private function row_actions( int $id, bool $is_deco, bool $has_undo, bool $ai_available, bool $ai_landed ): void {
 		$links = array();
 
 		$links[] = $is_deco
@@ -382,6 +444,33 @@ final class AltTextPage {
 		}
 
 		echo implode( ' | ', $links ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- every link is escaped at construction in row_link().
+
+		if ( $ai_available ) {
+			printf(
+				'<form method="post" action="%s" style="margin-top:6px" data-janitorix-once="1" data-janitorix-ai="1" data-janitorix-apply="%s">',
+				esc_url( admin_url( 'admin-post.php' ) ),
+				esc_attr__( 'Apply', 'janitorix-media-audit' )
+			);
+			wp_nonce_field( 'janitorix_alt_ai_suggest' );
+			echo '<input type="hidden" name="action" value="janitorix_alt_ai_suggest">';
+			printf( '<input type="hidden" name="image" value="%d">', (int) $id );
+			printf(
+				'<input type="submit" class="button" value="%s">',
+				esc_attr__( 'Suggest with AI', 'janitorix-media-audit' )
+			);
+			echo '<br><span class="janitorix-ai-message"></span>';
+			echo '</form>';
+
+			if ( $ai_landed ) {
+				// phpcs:disable WordPress.Security.NonceVerification.Recommended -- display only; the ask was nonce-verified before the redirect that set these.
+				$message = isset( $_GET['janitorix_message'] ) ? sanitize_text_field( wp_unslash( $_GET['janitorix_message'] ) ) : '';
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+				if ( '' !== $message ) {
+					printf( '<p><small>%s</small></p>', esc_html( rawurldecode( $message ) ) );
+				}
+			}
+		}
 	}
 
 	/**
@@ -565,16 +654,13 @@ final class AltTextPage {
 	/**
 	 * Translate a suggestion source key at render time.
 	 *
-	 * @param string $source One of 'filename', 'title', 'parent'.
+	 * Delegates to the registry so the reloaded row and the AJAX reply label
+	 * a source the same way — one function, two callers.
+	 *
+	 * @param string $source One of 'filename', 'title', 'parent' — or 'ai:<model>'.
 	 */
 	private function source_label( string $source ): string {
-		$labels = array(
-			'filename' => __( 'filename', 'janitorix-media-audit' ),
-			'title'    => __( 'title', 'janitorix-media-audit' ),
-			'parent'   => __( 'parent post', 'janitorix-media-audit' ),
-		);
-
-		return $labels[ $source ] ?? $source;
+		return \JanitorixMediaAudit\AltText\SuggestionProviders::source_label( $source );
 	}
 
 	/**

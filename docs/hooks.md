@@ -10,6 +10,7 @@ All hooks are prefixed `janitorix_`.
 | [`janitorix_register_scanners`](#janitorix_register_scanners) | action | Add your own scanner to the registry |
 | [`janitorix_image_key_hints`](#janitorix_image_key_hints) | filter | Teach the Generic Fallback Scanner a new field-name pattern |
 | [`janitorix_content_scanner_post_types`](#janitorix_content_scanner_post_types) | filter | Change which post types the Content Scanner reads |
+| [`janitorix_alt_suggestion_providers`](#janitorix_alt_suggestion_providers) | filter | Add your own alt-text suggestion provider |
 
 ---
 
@@ -78,6 +79,29 @@ add_filter( 'janitorix_content_scanner_post_types', function ( $types ) {
 	return array_diff( $types, array( 'log_entry' ) );
 } );
 ```
+
+---
+
+## `janitorix_alt_suggestion_providers`
+
+Fires when the Alt Text screen needs its suggestion sources — the built-in
+rule-based provider is always present, the AI one joins when the owner
+enabled it and saved a key. Return the array with your own provider added,
+keyed by its `id()`: it must implement
+`JanitorixMediaAudit\AltText\Contracts\SuggestionProvider` (`id()`,
+`label()`, `suggest()` — see that interface in this repo's
+`src/AltText/Contracts/`).
+
+```php
+add_filter( 'janitorix_alt_suggestion_providers', function ( $providers ) {
+	$providers['my-provider'] = new My_Alt_Provider();
+	return $providers;
+} );
+```
+
+**Be aware:** a provider suggests words; it never writes them. Applying stays
+with the screen (with undo kept), whatever the source. A provider that
+declines returns null — declining is a normal answer, not a failure.
 
 ---
 

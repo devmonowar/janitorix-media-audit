@@ -1,6 +1,6 @@
 === Janitorix Media Audit ===
 Contributors: kstmonowar
-Tags: media, cleanup, unused images, media library, storage
+Tags: media, cleanup, unused images, media library, alt text
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -8,7 +8,7 @@ Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Finds unused images in your media library — and proves they are unused before recommending anything. Confidence score, risk level, safe delete.
+Finds unused images and proves it — confidence, risk, safe delete. Plus an alt text audit with optional AI suggestions.
 
 == Description ==
 
@@ -33,13 +33,30 @@ These are never blended into one score. A site logo nobody references and a stra
 
 A separate screen lists every image missing alt text (or carrying a weak one like "IMG_2034"), suggests a replacement built from the filename, title, or parent post, and applies it only when you say so — with undo. Images can be marked decorative, and `wp janitorix alt stats` reports coverage for scripting. Nothing here affects confidence, risk, or any deletion recommendation.
 
+= Optional AI suggestions =
+
+The alt text screen can also ask an AI model — but only if you enable it under Settings and add your own API key. The plugin ships no key and makes no AI calls on its own. Each suggestion is reviewed in the textbox before anything is saved, exactly like a rule-based one.
+
+= External services =
+
+AI suggestions are off by default. When you enable them and save a key, each image you ask about is sent — resized to at most 1024px — together with its filename and its parent post's title, to the service at the base URL you configured. The plugin itself stores nothing externally; what the service does with that data is governed by its own terms, which you accept when you create your key. Providers differ — some train on API data, some do not — so read your chosen service before enabling. Examples (your own service's terms apply, not these examples):
+
+* OpenAI — [Terms](https://openai.com/policies/terms-of-use) · [Privacy](https://openai.com/policies/privacy-policy)
+* Anthropic — [Legal](https://www.anthropic.com/legal) · [Privacy](https://www.anthropic.com/legal/privacy)
+* Google Gemini — [Terms](https://ai.google.dev/gemini-api/terms) · [Privacy](https://policies.google.com/privacy)
+* Groq — [Terms](https://groq.com/terms-of-use) · [Privacy](https://groq.com/privacy-policy)
+* OpenRouter — [Terms](https://openrouter.ai/terms) · [Privacy](https://openrouter.ai/privacy)
+
+No other part of this plugin contacts any external service. Scans, suggestions, and reports all run on your own site.
+
 = What it refuses to do =
 
 * It will not recommend deleting anything if it could not search enough of your site. Below 70% coverage, it says so and recommends a rescan instead.
 * It will not offer Trash for anything at Medium risk or above, no matter how confident it is.
 * It will never delete your site logo, icon, or header — those are refused outright, not merely scored low.
 * It will not touch an image uploaded in the last 24 hours, because you probably have plans for it.
-* It never deletes anything in one step. Trash first, always, and only from the Trash can anything be permanently removed.
+ * It never deletes anything in one step. Trash first, always, and only from the Trash can anything be permanently removed.
+ * It never contacts any external service on its own. The only network call the plugin can ever make is an AI suggestion you explicitly ask for, after enabling it with your own key.
 
 = Every number shows its work =
 
@@ -100,6 +117,10 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 
 "Unattached" only means the image was not uploaded inside a post. It says nothing about whether anything references it — a logo, a Customizer image and most page-builder images are all "unattached" and all in use. Unused means no reference anywhere, which takes a real search to establish.
 
+= Does the AI feature send my images anywhere? =
+
+Only when you ask it to, image by image. Enabling AI and saving your own key sends nothing by itself. Each "Suggest with AI" click sends that one image (resized to at most 1024px), its filename and its parent post's title to the service you configured — see "External services" above for exactly what goes where. Rule-based suggestions never leave your site.
+
 == Screenshots ==
 
 1. The dashboard — a verdict first, with the reasons behind it
@@ -113,6 +134,8 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 
 = 1.1.0 =
 * New: alt text audit — a dedicated screen listing images with missing or weak alt text, with rule-based suggestions (filename, title, parent post), one-click apply with undo, decorative marking, and a Dashboard coverage card.
+* New: editable suggestion box — apply the suggestion as-is or write your own words; hand-written text is capped and kept for undo like any apply.
+* New: optional AI suggestions (BYOK) — per-image "Suggest with AI" on models you key yourself, reviewed before saving, with test connection, rate-limit handling, and cached answers. Off by default; rule-based suggestions never need it.
 * New: `wp janitorix alt stats` — read-only coverage report for the command line, with `--format=json` for scripting.
 * Note: the alt text audit never touches confidence, risk, or deletion recommendations.
 
@@ -184,6 +207,9 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+New Alt Text screen with rule-based and optional AI suggestions. Nothing changes about existing scans or settings; AI stays off unless you enable it with your own key.
 
 = 1.0.5 =
 Review notice added; uninstall and performance fixes. No settings change needed.

@@ -219,6 +219,13 @@ echo str_repeat( '-', 60 ) . "\n";
  * destroys only fixtures it created, gated on a marker meta a real image cannot
  * carry. Any THIRD file gaining a destructive call is the failure this whole
  * plugin exists to prevent.
+ *
+ * One narrow exception: deleting the plugin's OWN temp files. Resizing an
+ * image for the AI provider goes through a temp file (wp_tempnam, system temp
+ * dir — never the uploads directory), and leaving those behind would be litter
+ * by design. So `unlink` alone does not offend in a file that creates its
+ * victims with `wp_tempnam` in that same file; every other destructive call,
+ * and `unlink` anywhere else, still does.
  */
 $allowed_destructive = array( 'src/Cleanup/CleanupEngine.php', 'src/Calibration/Seeder.php' );
 $offenders           = array();
@@ -226,9 +233,18 @@ $offenders           = array();
 foreach ( $all_files as $file ) {
 	$hits = array_intersect( called_functions( $file ), $destructive );
 
-	if ( $hits && ! in_array( rel( $root, $file ), $allowed_destructive, true ) ) {
-		$offenders[] = rel( $root, $file ) . ' calls ' . implode( ', ', array_unique( $hits ) );
+	if ( empty( $hits ) || in_array( rel( $root, $file ), $allowed_destructive, true ) ) {
+		continue;
 	}
+
+	$only_unlink_temp = array( 'unlink' ) === array_values( array_unique( $hits ) )
+		&& false !== strpos( (string) file_get_contents( $file ), 'wp_tempnam' );
+
+	if ( $only_unlink_temp ) {
+		continue;
+	}
+
+	$offenders[] = rel( $root, $file ) . ' calls ' . implode( ', ', array_unique( $hits ) );
 }
 
 check(

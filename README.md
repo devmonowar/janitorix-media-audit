@@ -17,7 +17,7 @@
 
 ## What this repository is
 
-A complete, working WordPress plugin — one scanner per place an image can hide, a Confidence Engine, a Risk Engine, a Recommendation Engine, and five admin screens (Dashboard, Images, Image Details, Scan History, Settings). See `readme.txt` for the full feature description and changelog, or the [help docs](docs/README.md) for how to use it.
+A complete, working WordPress plugin — one scanner per place an image can hide, a Confidence Engine, a Risk Engine, a Recommendation Engine, six admin screens (Dashboard, Images, Image Details, Alt Text, Scan History, Settings) plus an optional AI alt-text suggester you key yourself. See `readme.txt` for the full feature description and changelog, or the [help docs](docs/README.md) for how to use it.
 
 The plugin is on the [WordPress.org plugin directory](https://wordpress.org/plugins/janitorix-media-audit/), so it installs and updates from inside WordPress like any other plugin.
 
