@@ -45,3 +45,4 @@
 .janitorix-bulk-bar .janitorix-bulk-row+.janitorix-bulk-row{border-top:1px solid #f0f0f1}
 .janitorix-protected{display:inline-flex;align-items:center;gap:3px;color:#787c82;cursor:help}
 .janitorix-protected .dashicons{font-size:15px;width:15px;height:15px}
+.janitorix-alt-table td,.janitorix-alt-table th{vertical-align:middle}

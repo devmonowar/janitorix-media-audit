@@ -198,7 +198,7 @@ final class AltTextPage {
 		// POST form (custom text + Apply), and a form inside a form would be
 		// invalid markup that browsers submit as the outer one. The checkboxes
 		// join the bulk form below through the HTML `form` attribute instead.
-		echo '<table class="widefat striped"><thead><tr>';
+		echo '<table class="widefat striped janitorix-alt-table"><thead><tr>';
 		echo '<td class="check-column"><input type="checkbox" id="janitorix-alt-select-all" aria-label="' . esc_attr__( 'Select all images on this page', 'janitorix-media-audit' ) . '"></td>';
 		echo '<th>' . esc_html__( 'Image', 'janitorix-media-audit' ) . '</th>';
 		echo '<th>' . esc_html__( 'Status', 'janitorix-media-audit' ) . '</th>';
