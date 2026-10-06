@@ -154,6 +154,9 @@ final class SettingsPage {
 
 		echo '<h2>' . esc_html__( 'AI suggestions (optional)', 'janitorix-media-audit' ) . '</h2>';
 		echo '<p>' . esc_html__( 'Rule-based suggestions always work and need nothing here. If you want a second opinion from an AI model, enable it below with your own API key — the plugin ships none.', 'janitorix-media-audit' ) . '</p>';
+
+		$this->preset_buttons();
+
 		echo '<table class="form-table" role="presentation"><tbody>';
 
 		$this->toggle(
@@ -189,6 +192,87 @@ final class SettingsPage {
 		);
 
 		echo '</tbody></table>';
+	}
+
+	/**
+	 * One-click provider presets: pick yours, paste the key.
+	 *
+	 * The buttons fill the two technical fields through a tiny script; the
+	 * key links are plain anchors, so they work with or without JavaScript.
+	 * Without the script the buttons do nothing and the fields are typed by
+	 * hand — progressive enhancement, not a requirement.
+	 */
+	private function preset_buttons(): void {
+		$presets = \JanitorixMediaAudit\AltText\Ai\AiSettings::presets();
+
+		if ( empty( $presets ) ) {
+			return;
+		}
+
+		echo '<p>';
+		echo esc_html__( 'Start from a preset, then paste your key:', 'janitorix-media-audit' ) . ' ';
+
+		foreach ( $presets as $id => $preset ) {
+			printf(
+				'<button type="button" class="button" data-janitorix-preset="1" data-janitorix-preset-url="%s" data-janitorix-preset-model="%s">%s</button> ',
+				esc_attr( $preset['base_url'] ),
+				esc_attr( $preset['model'] ),
+				esc_html( $this->preset_label( (string) $id, $preset['label'] ) )
+			);
+		}
+
+		echo '</p><p class="description">';
+
+		$links = array();
+
+		foreach ( $presets as $id => $preset ) {
+			$links[] = sprintf(
+				'<a href="%s" target="_blank" rel="noopener">%s</a>',
+				esc_url( $preset['key_url'] ),
+				esc_html( $this->preset_key_label( (string) $id, $preset['key_label'] ) )
+			);
+		}
+
+		echo implode( ' · ', $links ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- every link is escaped at construction above.
+		echo '</p>';
+	}
+
+	/**
+	 * Translate a built-in preset's button text.
+	 *
+	 * Brand names do not change across languages, but the mapping keeps the
+	 * door open: a preset arriving through the filter renders as supplied,
+	 * while the four shipped ones stay translatable strings like any other.
+	 *
+	 * @param string $id    The preset id.
+	 * @param string $label Its untranslated label.
+	 */
+	private function preset_label( string $id, string $label ): string {
+		$labels = array(
+			'gemini'     => __( 'Gemini', 'janitorix-media-audit' ),
+			'openai'     => __( 'OpenAI', 'janitorix-media-audit' ),
+			'groq'       => __( 'Groq', 'janitorix-media-audit' ),
+			'openrouter' => __( 'OpenRouter', 'janitorix-media-audit' ),
+		);
+
+		return $labels[ $id ] ?? $label;
+	}
+
+	/**
+	 * Translate a built-in preset's key-link text.
+	 *
+	 * @param string $id    The preset id.
+	 * @param string $label Its untranslated key-link text.
+	 */
+	private function preset_key_label( string $id, string $label ): string {
+		$labels = array(
+			'gemini'     => __( 'Get a free Gemini key', 'janitorix-media-audit' ),
+			'openai'     => __( 'Get an OpenAI key', 'janitorix-media-audit' ),
+			'groq'       => __( 'Get a free Groq key', 'janitorix-media-audit' ),
+			'openrouter' => __( 'Get an OpenRouter key', 'janitorix-media-audit' ),
+		);
+
+		return $labels[ $id ] ?? $label;
 	}
 
 	/**

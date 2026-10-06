@@ -172,6 +172,57 @@ final class AiSettings {
 	}
 
 	/**
+	 * One-click presets: label, endpoint, a working default model, key link.
+	 *
+	 * Three fields stop most people — a preset reduces it to "pick yours,
+	 * paste the key". Models retire (we watched two die for new keys in a
+	 * week), so these are starting points, not promises: the fields stay
+	 * editable, and a wrong model fails loudly with its own message rather
+	 * than billing quietly for the wrong one.
+	 *
+	 * @return array<string,array{label:string,base_url:string,model:string,key_url:string,key_label:string}>
+	 */
+	public static function presets(): array {
+		$presets = array(
+			'gemini'     => array(
+				'label'     => 'Gemini',
+				'base_url'  => 'https://generativelanguage.googleapis.com/v1beta/openai',
+				'model'     => 'gemini-3.5-flash-lite',
+				'key_url'   => 'https://aistudio.google.com/apikey',
+				'key_label' => 'Get a free Gemini key',
+			),
+			'openai'     => array(
+				'label'     => 'OpenAI',
+				'base_url'  => 'https://api.openai.com/v1',
+				'model'     => 'gpt-4o-mini',
+				'key_url'   => 'https://platform.openai.com/api-keys',
+				'key_label' => 'Get an OpenAI key',
+			),
+			'groq'       => array(
+				'label'     => 'Groq',
+				'base_url'  => 'https://api.groq.com/openai/v1',
+				'model'     => 'qwen/qwen3.8-27b',
+				'key_url'   => 'https://console.groq.com/keys',
+				'key_label' => 'Get a free Groq key',
+			),
+			'openrouter' => array(
+				'label'     => 'OpenRouter',
+				'base_url'  => 'https://openrouter.ai/api/v1',
+				'model'     => 'openai/gpt-4o-mini',
+				'key_url'   => 'https://openrouter.ai/keys',
+				'key_label' => 'Get an OpenRouter key',
+			),
+		);
+
+		/**
+		 * Change the AI preset buttons.
+		 *
+		 * @param array<string,array{label:string,base_url:string,model:string,key_url:string,key_label:string}> $presets Keyed by preset id.
+		 */
+		return apply_filters( 'janitorix_alt_ai_presets', $presets );
+	}
+
+	/**
 	 * The option name, for the uninstaller.
 	 */
 	public static function option_name(): string {

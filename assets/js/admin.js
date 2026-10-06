@@ -171,4 +171,25 @@
 			form.submit();
 		} );
 	} );
+
+	// Preset buttons fill the two technical fields; the key is always typed
+	// by the person. No script, no fill — the fields stay hand-editable.
+	document.addEventListener( 'click', function ( e ) {
+		var button = e.target && e.target.closest ? e.target.closest( '[data-janitorix-preset]' ) : null;
+
+		if ( ! button ) {
+			return;
+		}
+
+		var url = document.getElementById( 'janitorix-alt-ai-base-url' );
+		var model = document.getElementById( 'janitorix-alt-ai-model' );
+
+		if ( url && button.getAttribute( 'data-janitorix-preset-url' ) ) {
+			url.value = button.getAttribute( 'data-janitorix-preset-url' );
+		}
+
+		if ( model && button.getAttribute( 'data-janitorix-preset-model' ) ) {
+			model.value = button.getAttribute( 'data-janitorix-preset-model' );
+		}
+	} );
 }() );

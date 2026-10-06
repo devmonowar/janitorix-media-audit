@@ -453,6 +453,21 @@ foreach ( array( 'timeout', 'unauthorized', 'rate-limited', 'bad-model', 'unknow
 	);
 }
 
+// ------------------------------------------------- presets are honest ---
+
+$presets = AiSettings::presets();
+
+check( 'four presets ship', 4 === count( $presets ) );
+
+foreach ( $presets as $id => $preset ) {
+	$shape_ok = isset( $preset['label'], $preset['base_url'], $preset['model'], $preset['key_url'], $preset['key_label'] )
+		&& '' !== $preset['label'] && '' !== $preset['model'];
+
+	check( "preset $id complete", $shape_ok );
+	check( "preset $id endpoint encrypted", 0 === strpos( $preset['base_url'], 'https://' ), $preset['base_url'] );
+	check( "preset $id key link encrypted", 0 === strpos( $preset['key_url'], 'https://' ), $preset['key_url'] );
+}
+
 // ------------------------------------------------------------------ report ---
 
 echo "\n" . str_repeat( '-', 62 ) . "\n";
