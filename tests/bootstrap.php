@@ -96,6 +96,20 @@ if ( ! function_exists( 'get_post' ) ) {
 	}
 }
 
+if ( ! function_exists( 'get_attached_file' ) ) {
+	/**
+	 * Tests never touch the disk: the AI provider tests inject a loader, so
+	 * no attached file ever exists here. Production uses the real function.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 *
+	 * @return string|false
+	 */
+	function get_attached_file( $attachment_id ) { // phpcs:ignore
+		return false;
+	}
+}
+
 if ( ! function_exists( 'wp_specialchars_decode' ) ) {
 	/**
 	 * `AttachmentResolver::normalize()` runs every candidate string through

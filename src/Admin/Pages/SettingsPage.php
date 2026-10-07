@@ -191,6 +191,15 @@ final class SettingsPage {
 				: esc_html__( 'No key saved yet.', 'janitorix-media-audit' )
 		);
 
+		if ( '' !== $masked ) {
+			printf(
+				'<tr><th scope="row"><label for="janitorix-alt-ai-remove-key">%s</label></th><td><input type="checkbox" id="janitorix-alt-ai-remove-key" name="janitorix_alt_ai_remove_key" value="1" aria-label="Delete the saved key"> <span>%s</span><p class="description">%s</p></td></tr>',
+				esc_html__( 'Remove key', 'janitorix-media-audit' ),
+				esc_html__( 'Delete the saved key', 'janitorix-media-audit' ),
+				esc_html__( 'Check this and save to forget the stored key. Type a new key above instead to replace it.', 'janitorix-media-audit' )
+			);
+		}
+
 		echo '</tbody></table>';
 	}
 

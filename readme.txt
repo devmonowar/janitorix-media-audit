@@ -2,7 +2,7 @@
 Contributors: kstmonowar
 Tags: media, cleanup, unused images, media library, alt text
 Requires at least: 6.2
-Tested up to: 7.1
+Tested up to: 7.1.3
 Requires PHP: 7.4
 Stable tag: 1.1.0
 License: GPLv2 or later
@@ -31,11 +31,11 @@ These are never blended into one score. A site logo nobody references and a stra
 
 = Alt text audit =
 
-A separate screen lists every image missing alt text (or carrying a weak one like "IMG_2034"), suggests a replacement built from the filename, title, or parent post, and applies it only when you say so — with undo. Images can be marked decorative, and `wp janitorix alt stats` reports coverage for scripting. Nothing here affects confidence, risk, or any deletion recommendation.
+A separate screen lists every image missing alt text (or carrying a weak one like "IMG_2034"), suggests a replacement built from the filename, title, or parent post, and applies it only when you say so — with undo. The suggestion is editable: apply it as-is or write your own words. Images can be marked decorative, a Dashboard card tracks your coverage, and `wp janitorix alt stats` reports coverage for scripting. Nothing here affects confidence, risk, or any deletion recommendation.
 
 = Optional AI suggestions =
 
-The alt text screen can also ask an AI model — but only if you enable it under Settings and add your own API key. The plugin ships no key and makes no AI calls on its own. Each suggestion is reviewed in the textbox before anything is saved, exactly like a rule-based one.
+The alt text screen can also ask an AI model — but only if you enable it under Settings and add your own API key. One-click presets for Gemini, OpenAI, Groq, and OpenRouter fill in the endpoint and a working default model, so setup is "pick yours, paste the key" — and a test-connection button confirms it works before you spend anything. The plugin ships no key and makes no AI calls on its own. Each suggestion is reviewed in the textbox before anything is saved, exactly like a rule-based one, with rate-limit handling and cached answers so you never pay twice for the same image.
 
 = External services =
 
@@ -129,14 +129,19 @@ Only when you ask it to, image by image. Enabling AI and saving your own key sen
 4. An image that is in use, with every reference that proves it, and the rule that refuses to trash it
 5. The behaviour you cannot switch off, stated rather than offered
 6. Every scan kept as a snapshot a later one never rewrites
+7. The alt text audit — every image missing or weakening its alt text, with a suggestion ready
+8. Optional AI suggestions with one-click provider presets and test connection (off by default)
 
 == Changelog ==
 
 = 1.1.0 =
 * New: alt text audit — a dedicated screen listing images with missing or weak alt text, with rule-based suggestions (filename, title, parent post), one-click apply with undo, decorative marking, and a Dashboard coverage card.
 * New: editable suggestion box — apply the suggestion as-is or write your own words; hand-written text is capped and kept for undo like any apply.
-* New: optional AI suggestions (BYOK) — per-image "Suggest with AI" on models you key yourself, reviewed before saving, with test connection, rate-limit handling, and cached answers. Off by default; rule-based suggestions never need it.
+* New: optional AI suggestions (BYOK) — per-image "Suggest with AI" with one-click presets (Gemini, OpenAI, Groq, OpenRouter), test connection, rate-limit handling, and cached answers. Reviewed before saving, off by default; rule-based suggestions never need it.
 * New: `wp janitorix alt stats` — read-only coverage report for the command line, with `--format=json` for scripting.
+* New: "Remove key" checkbox in Settings — delete the stored API key without disabling anything else.
+* Fixed: replacing an image under the same attachment ID no longer serves the previous file's cached AI suggestion.
+* Hardening: AI requests no longer follow HTTP redirects, so the API key stays with the configured endpoint.
 * Note: the alt text audit never touches confidence, risk, or deletion recommendations.
 
 = 1.0.5 =

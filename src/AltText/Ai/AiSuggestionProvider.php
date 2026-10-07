@@ -137,7 +137,7 @@ final class AiSuggestionProvider implements SuggestionProvider {
 			return null;
 		}
 
-		$cached = AiCache::get_result( $id, $this->model, $this->locale );
+		$cached = AiCache::get_result( $id, $this->model, $this->locale, self::file_fingerprint( $id ) );
 
 		if ( null !== $cached ) {
 			return array(
@@ -170,7 +170,7 @@ final class AiSuggestionProvider implements SuggestionProvider {
 			return null;
 		}
 
-		AiCache::save_result( $id, $this->model, $this->locale, $text );
+		AiCache::save_result( $id, $this->model, $this->locale, self::file_fingerprint( $id ), $text );
 
 		return array(
 			'text'   => $text,
@@ -290,6 +290,32 @@ final class AiSuggestionProvider implements SuggestionProvider {
 		$loader = $this->loader;
 
 		return $loader( $attachment_id );
+	}
+
+	/**
+	 * What version of the file the cache key should bind to.
+	 *
+	 * The attached file's modification time: replacing the image under the
+	 * same attachment ID changes the fingerprint, so a week-old cached
+	 * answer about the previous file is never served. Empty when the file
+	 * cannot be read — the key then behaves exactly as before.
+	 *
+	 * @param int $attachment_id The image.
+	 */
+	private static function file_fingerprint( int $attachment_id ): string {
+		if ( ! function_exists( 'get_attached_file' ) ) {
+			return '';
+		}
+
+		$file = get_attached_file( $attachment_id );
+
+		if ( ! is_string( $file ) || '' === $file || ! file_exists( $file ) ) {
+			return '';
+		}
+
+		$mtime = filemtime( $file );
+
+		return false === $mtime ? '' : (string) $mtime;
 	}
 
 	/**

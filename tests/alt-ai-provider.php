@@ -224,6 +224,14 @@ check(
 	AiCache::result_key( 1, 'm', 'en_US' ) !== AiCache::result_key( 2, 'm', 'en_US' )
 );
 check(
+	'file change changes the key',
+	AiCache::result_key( 1, 'm', 'en_US', '111' ) !== AiCache::result_key( 1, 'm', 'en_US', '222' )
+);
+check(
+	'no file keeps the old key',
+	AiCache::result_key( 1, 'm', 'en_US' ) === AiCache::result_key( 1, 'm', 'en_US', '' )
+);
+check(
 	'pending key names its owner and image',
 	'jalt_ai_p_7_42' === AiCache::pending_key( 7, 42 )
 );

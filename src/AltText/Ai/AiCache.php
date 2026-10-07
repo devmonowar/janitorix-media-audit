@@ -42,12 +42,19 @@ final class AiCache {
 	/**
 	 * Build the result-cache key. Pure string work, pinned by tests.
 	 *
+	 * The fingerprint is the attached file's modification time: replacing
+	 * the image under the same attachment ID must not resurrect a week-old
+	 * answer about the previous file. Empty stays valid — callers that have
+	 * no file (tests, mostly) get the same key they always did.
+	 *
 	 * @param int    $attachment_id The image.
 	 * @param string $model         The model that answered.
 	 * @param string $locale        The language asked for.
+	 * @param string $fingerprint   File change marker, e.g. filemtime.
 	 */
-	public static function result_key( int $attachment_id, string $model, string $locale ): string {
-		return self::PREFIX . 'r_' . md5( $attachment_id . '|' . strtolower( trim( $model ) ) . '|' . $locale . '|v' . AiSuggestionProvider::PROMPT_VERSION );
+	public static function result_key( int $attachment_id, string $model, string $locale, string $fingerprint = '' ): string {
+		$tail = '' !== $fingerprint ? '|' . $fingerprint : '';
+		return self::PREFIX . 'r_' . md5( $attachment_id . '|' . strtolower( trim( $model ) ) . '|' . $locale . '|v' . AiSuggestionProvider::PROMPT_VERSION . $tail );
 	}
 
 	/**
@@ -66,9 +73,10 @@ final class AiCache {
 	 * @param int    $attachment_id The image.
 	 * @param string $model         The model that answered.
 	 * @param string $locale        The language asked for.
+	 * @param string $fingerprint   File change marker, e.g. filemtime.
 	 */
-	public static function get_result( int $attachment_id, string $model, string $locale ): ?string {
-		$cached = get_transient( self::result_key( $attachment_id, $model, $locale ) );
+	public static function get_result( int $attachment_id, string $model, string $locale, string $fingerprint = '' ): ?string {
+		$cached = get_transient( self::result_key( $attachment_id, $model, $locale, $fingerprint ) );
 
 		return is_string( $cached ) && '' !== $cached ? $cached : null;
 	}
@@ -79,10 +87,11 @@ final class AiCache {
 	 * @param int    $attachment_id The image.
 	 * @param string $model         The model that answered.
 	 * @param string $locale        The language asked for.
+	 * @param string $fingerprint   File change marker, e.g. filemtime.
 	 * @param string $text          The cleaned suggestion.
 	 */
-	public static function save_result( int $attachment_id, string $model, string $locale, string $text ): void {
-		set_transient( self::result_key( $attachment_id, $model, $locale ), $text, self::RESULT_TTL );
+	public static function save_result( int $attachment_id, string $model, string $locale, string $fingerprint, string $text ): void {
+		set_transient( self::result_key( $attachment_id, $model, $locale, $fingerprint ), $text, self::RESULT_TTL );
 	}
 
 	/**

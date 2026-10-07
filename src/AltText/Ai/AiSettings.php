@@ -144,7 +144,12 @@ final class AiSettings {
 		);
 
 		// A blank key field means "unchanged" — the saved key never renders
-		// into HTML, so the browser cannot send it back.
+		// into HTML, so the browser cannot send it back. The remove-key
+		// checkbox is the only path that deletes it; a newly typed key wins
+		// over the checkbox, so replacing and removing cannot mix.
+		if ( ! empty( $input['janitorix_alt_ai_remove_key'] ) ) {
+			$clean['key'] = '';
+		}
 		if ( isset( $input['janitorix_alt_ai_key'] ) && is_string( $input['janitorix_alt_ai_key'] ) && '' !== trim( $input['janitorix_alt_ai_key'] ) ) {
 			$clean['key'] = substr( trim( $input['janitorix_alt_ai_key'] ), 0, 500 );
 		}

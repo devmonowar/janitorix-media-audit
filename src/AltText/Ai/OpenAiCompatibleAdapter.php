@@ -119,12 +119,15 @@ final class OpenAiCompatibleAdapter {
 		);
 
 		$args = array(
-			'timeout' => self::TIMEOUT,
-			'headers' => array(
+			'timeout'     => self::TIMEOUT,
+			// Never follow redirects: the Authorization header carries the
+			// key, and a redirect would resend it to wherever it points.
+			'redirection' => 0,
+			'headers'     => array(
 				'Content-Type'  => 'application/json',
 				'Authorization' => 'Bearer ' . $this->key,
 			),
-			'body'    => is_string( $body ) ? $body : '{}',
+			'body'        => is_string( $body ) ? $body : '{}',
 		);
 
 		$response = null !== $this->transport
