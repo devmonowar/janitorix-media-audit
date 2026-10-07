@@ -171,9 +171,23 @@ final class OpenAiCompatibleAdapter {
 		}
 
 		if ( 200 !== $code ) {
+			if ( $this->is_model_error( $response ) ) {
+				return array(
+					'ok'    => false,
+					'error' => 'bad-model',
+				);
+			}
+
+			// Anything else carries the service's own words (HTTP code +
+			// its error message, capped) so Test connection can say more
+			// than "unexpectedly" — a retired model, a spent quota and a
+			// blocked host all need different next steps.
+			$detail = $this->provider_error( $response );
+
 			return array(
-				'ok'    => false,
-				'error' => $this->is_model_error( $response ) ? 'bad-model' : 'bad-response',
+				'ok'     => false,
+				'error'  => 'bad-response',
+				'detail' => '' !== $detail ? "HTTP {$code}: {$detail}" : "HTTP {$code}",
 			);
 		}
 
@@ -201,8 +215,16 @@ final class OpenAiCompatibleAdapter {
 	 * keys, and the provider adds only image-prep keys of its own.
 	 *
 	 * @param string $error One of the keys complete() returns.
+	 * @param string $detail Optional service detail (HTTP code + its words).
 	 */
-	public static function user_message( string $error ): string {
+	public static function user_message( string $error, string $detail = '' ): string {
+		if ( '' !== $detail && ( 'bad-response' === $error || ! self::known_key( $error ) ) ) {
+			return sprintf(
+				/* translators: %s: the service's own error, e.g. "HTTP 403: ..." */
+				__( 'The service answered unexpectedly (%s). Try again.', 'janitorix-media-audit' ),
+				$detail
+			);
+		}
 		switch ( $error ) {
 			case 'timeout':
 				return __( 'The request timed out after 30 seconds. Try again.', 'janitorix-media-audit' );
@@ -230,6 +252,57 @@ final class OpenAiCompatibleAdapter {
 			default:
 				return __( 'The service answered unexpectedly. Try again.', 'janitorix-media-audit' );
 		}
+	}
+
+	/**
+	 * The keys user_message() translates. Anything else falls through to
+	 * the generic answer — which is where a detail earns its place.
+	 *
+	 * @param string $error The key to check.
+	 */
+	private static function known_key( string $error ): bool {
+		return in_array(
+			$error,
+			array( 'timeout', 'unauthorized', 'rate-limited', 'bad-model', 'transport-error', 'insecure-url', 'not-configured', 'unsupported-type', 'too-large', 'editor-error', 'missing-image', 'empty-reply' ),
+			true
+		);
+	}
+
+	/**
+	 * The service's own error words, OpenAI-shaped or nothing.
+	 *
+	 * Chat-completions services decline with `{"error":{"message":"..."}}`.
+	 * Capped and plain text: it travels into an admin notice, and a key
+	 * never appears here (it travels in the request header, not the reply).
+	 *
+	 * @param mixed $response What the transport returned.
+	 */
+	private function provider_error( $response ): string {
+		if ( ! is_array( $response ) ) {
+			return '';
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		if ( ! is_string( $body ) || '' === $body ) {
+			return '';
+		}
+
+		$data = json_decode( $body, true );
+
+		if ( ! is_array( $data ) || ! isset( $data['error'] ) ) {
+			return '';
+		}
+
+		$message = is_array( $data['error'] )
+			? ( $data['error']['message'] ?? '' )
+			: $data['error'];
+
+		if ( ! is_string( $message ) || '' === trim( $message ) ) {
+			return '';
+		}
+
+		return substr( trim( preg_replace( '/\s+/', ' ', $message ) ), 0, 160 );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 Contributors: kstmonowar
 Tags: media, cleanup, unused images, media library, alt text
 Requires at least: 6.2
-Tested up to: 7.1.3
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.1.0
 License: GPLv2 or later
@@ -142,6 +142,7 @@ Only when you ask it to, image by image. Enabling AI and saving your own key sen
 * New: "Remove key" checkbox in Settings — delete the stored API key without disabling anything else.
 * Fixed: replacing an image under the same attachment ID no longer serves the previous file's cached AI suggestion.
 * Hardening: AI requests no longer follow HTTP redirects, so the API key stays with the configured endpoint.
+* Improved: when the AI service declines, Test connection and the Alt Text screen now quote the service's own reason (HTTP code + message) instead of only "answered unexpectedly".
 * Note: the alt text audit never touches confidence, risk, or deletion recommendations.
 
 = 1.0.5 =

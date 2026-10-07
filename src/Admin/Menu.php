@@ -725,7 +725,7 @@ final class Menu {
 		);
 
 		if ( ! $result['ok'] ) {
-			$this->redirect_to_settings( \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( $result['error'] ), false );
+			$this->redirect_to_settings( \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( $result['error'], isset( $result['detail'] ) && is_string( $result['detail'] ) ? $result['detail'] : '' ), false );
 		}
 
 		$this->redirect_to_settings(
@@ -891,11 +891,12 @@ final class Menu {
 			// last_error() is the AI provider's own vocabulary; a
 			// third-party provider that declines without one gets the
 			// generic answer instead of a fatal.
-			$error = $provider instanceof \JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider ? $provider->last_error() : 'bad-response';
+			$error  = $provider instanceof \JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider ? $provider->last_error() : 'bad-response';
+			$detail = $provider instanceof \JanitorixMediaAudit\AltText\Ai\AiSuggestionProvider ? $provider->last_detail() : '';
 
 			return array(
 				'suggestion' => null,
-				'message'    => \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( $error ),
+				'message'    => \JanitorixMediaAudit\AltText\Ai\OpenAiCompatibleAdapter::user_message( $error, $detail ),
 			);
 		}
 

@@ -453,6 +453,37 @@ foreach ( array( 'timeout', 'unauthorized', 'rate-limited', 'bad-model', 'unknow
 	);
 }
 
+check(
+	'unexpected answer quotes the service',
+	false !== strpos( OpenAiCompatibleAdapter::user_message( 'bad-response', 'HTTP 403: Project deactivated' ), 'HTTP 403: Project deactivated' )
+);
+
+check(
+	'known keys ignore detail',
+	false !== strpos( OpenAiCompatibleAdapter::user_message( 'unauthorized' ), 'rejected' )
+	&& false === strpos( OpenAiCompatibleAdapter::user_message( 'unauthorized', 'HTTP 401: x' ), 'HTTP 401' )
+);
+
+$seen    = array();
+$adapter = adapter_for(
+	function (): array {
+		return array(
+			'code' => 403,
+			'body' => '{"error":{"message":"Project has been deactivated"}}',
+		);
+	},
+	$seen
+);
+
+$result = $adapter->complete( array() );
+
+check(
+	'declined service words travel with the failure',
+	isset( $result['error'], $result['detail'] ) && 'bad-response' === $result['error']
+		&& 'HTTP 403: Project has been deactivated' === $result['detail'],
+	var_export( $result, true )
+);
+
 // ------------------------------------------------- presets are honest ---
 
 $presets = AiSettings::presets();

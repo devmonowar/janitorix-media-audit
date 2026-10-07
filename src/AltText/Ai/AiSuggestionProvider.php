@@ -82,6 +82,16 @@ final class AiSuggestionProvider implements SuggestionProvider {
 	private $last_error = '';
 
 	/**
+	 * The service's own words from the last decline, or '' when none.
+	 *
+	 * Travels beside last_error() so the screen can quote the service
+	 * instead of guessing — see the adapter's 'detail'.
+	 *
+	 * @var string
+	 */
+	private $last_detail = '';
+
+	/**
 	 * Wire the provider to one adapter, model and language.
 	 *
 	 * @param OpenAiCompatibleAdapter $adapter The user's provider and key.
@@ -119,6 +129,13 @@ final class AiSuggestionProvider implements SuggestionProvider {
 	}
 
 	/**
+	 * The service's own words from the last decline, or '' when none.
+	 */
+	public function last_detail(): string {
+		return $this->last_detail;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 *
 	 * Needs `attachment_id` in the context beside the usual three fields —
@@ -127,7 +144,8 @@ final class AiSuggestionProvider implements SuggestionProvider {
 	 * @param array{filename:string,title:string,parent_title:string} $context What is known about the image.
 	 */
 	public function suggest( array $context ): ?array {
-		$this->last_error = '';
+		$this->last_error  = '';
+		$this->last_detail = '';
 
 		$id = (int) ( $context['attachment_id'] ?? 0 );
 
@@ -157,7 +175,8 @@ final class AiSuggestionProvider implements SuggestionProvider {
 		$result = $this->adapter->complete( self::build_messages( $context, $image, $this->locale ) );
 
 		if ( ! $result['ok'] ) {
-			$this->last_error = $result['error'];
+			$this->last_error  = $result['error'];
+			$this->last_detail = isset( $result['detail'] ) && is_string( $result['detail'] ) ? $result['detail'] : '';
 
 			return null;
 		}
