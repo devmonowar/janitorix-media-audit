@@ -16,6 +16,8 @@ Most cleanup plugins tell you an image is unused. This one tells you **how sure 
 
 That difference matters, because the cost of being wrong is not symmetric. Leaving an unused image costs you a few kilobytes. Deleting a used one breaks your site — and you may not find out for weeks.
 
+Version 1.1.0 adds an alt text audit with rule-based and optional AI suggestions — see below.
+
 **[Read the full guide](https://devmonowar.github.io/blog/how-to-find-unused-images-in-wordpress/)** — why "unattached" is not the same as "unused", the places a reference hides, and how to check by hand · **[Plugin page](https://devmonowar.github.io/janitorix-media-audit/)** · **[Development on GitHub](https://github.com/devmonowar/janitorix-media-audit)** — report issues or contribute.
 
 = What it actually does =
@@ -120,6 +122,14 @@ It can, in ways no database scan sees. An image can be unused on your site and s
 = Does the AI feature send my images anywhere? =
 
 Only when you ask it to, image by image. Enabling AI and saving your own key sends nothing by itself. Each "Suggest with AI" click sends that one image (resized to at most 1024px), its filename and its parent post's title to the service you configured — see "External services" above for exactly what goes where. Rule-based suggestions never leave your site.
+
+= Does alt text change on its own? =
+
+No. Nothing is applied until you click Save or Apply on that image, and every change keeps an undo. Marking decorative, editing the suggestion by hand, or dismissing an AI suggestion all work the same way — your call, reversible.
+
+= Is the alt text shown here the same as on the page? =
+
+Not always. This screen reads the alt text stored on the image itself; a theme or page builder may override it where the image is shown, so what a visitor actually hears can differ. Fix the stored text here first — that is the source everything else falls back to.
 
 == Screenshots ==
 
