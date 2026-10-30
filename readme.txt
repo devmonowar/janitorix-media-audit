@@ -4,7 +4,7 @@ Tags: media, cleanup, unused images, media library, alt text
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,10 @@ Not always. This screen reads the alt text stored on the image itself; a theme o
 
 == Changelog ==
 
+= 1.1.1 =
+* Tested with WordPress 7.1.4. No functional changes.
+* Docs: alt text FAQ added to the readme.
+
 = 1.1.0 =
 * New: alt text audit — a dedicated screen listing images with missing or weak alt text, with rule-based suggestions (filename, title, parent post), one-click apply with undo, decorative marking, and a Dashboard coverage card.
 * New: editable suggestion box — apply the suggestion as-is or write your own words; hand-written text is capped and kept for undo like any apply.
@@ -223,6 +227,9 @@ Not always. This screen reads the alt text stored on the image itself; a theme o
 * Scanner layer and Confidence Engine
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Compatibility release for WordPress 7.1.4. No settings change needed.
 
 = 1.1.0 =
 New Alt Text screen with rule-based and optional AI suggestions. Nothing changes about existing scans or settings; AI stays off unless you enable it with your own key.
